@@ -7,6 +7,7 @@ import { increment } from "./redux/counterSlice";
 import { Button, Layout } from "antd";
 import Navbar from "./components/home/Navbar";
 import MainContent from "./components/home/MainContent";
+import FooterContainer from "./components/home/FooterContainer";
 
 const { Header, Content, Footer } = Layout;
 
@@ -23,7 +24,7 @@ function App() {
         <MainContent />
       </Content>
       <Footer className="home-footer">
-        Quest Colombo ©{new Date().getFullYear()} Created by Quest Colombo
+        <FooterContainer />
       </Footer>
     </Layout>
   );
