@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from "./redux/counterSlice";
+import { Button } from "antd";
 
 function App() {
   const count = useSelector((state) => state.counter.value);
@@ -21,7 +22,9 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => dispatch(increment())}>count is {count}</button>
+        <Button type="primary" onClick={() => dispatch(increment())}>
+          count is {count}
+        </Button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
