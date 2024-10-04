@@ -35,7 +35,6 @@
 
 .home-hero-section {
   background: url("../assets/hero-section.jpg") no-repeat center center;
-
   position: relative;
   background-size: cover;
   height: 500px;
@@ -46,4 +45,29 @@
   color: white;
   margin: 10px 0;
   border-radius: 12px;
+}
+
+.home-feature-section {
+  padding: 20px 20px 50px 20px;
+  background-color: white;
+  border-radius: 12px;
+}
+
+.home-feature-section-title {
+  text-align: center;
+  color: #00b96b;
+}
+
+.home-feature-section-card {
+  border-radius: 12px;
+}
+
+.home-feature-section-card-icon {
+  font-size: 64px;
+  color: #00b96b;
+  margin-top: 24px;
+}
+
+.home-feature-section-card-meta {
+  text-align: center;
 }
