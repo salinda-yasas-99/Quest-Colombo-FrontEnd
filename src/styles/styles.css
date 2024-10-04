@@ -1,0 +1,49 @@
+.home-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  display: flex;
+  margin-right: 10px;
+}
+
+.navbar-logo img {
+  width: 70px;
+  max-height: 50px;
+  object-fit: contain;
+}
+
+.navbar-btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.home-content {
+  padding: 0 48px;
+}
+
+.home-footer {
+  padding: 0 48px;
+  text-align: center;
+}
+
+.home-hero-section {
+  background: url("../assets/hero-section.jpg") no-repeat center center;
+
+  position: relative;
+  background-size: cover;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  margin: 10px 0;
+  border-radius: 12px;
+}

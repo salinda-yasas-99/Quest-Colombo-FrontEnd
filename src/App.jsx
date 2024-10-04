@@ -4,35 +4,28 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from "./redux/counterSlice";
-import { Button } from "antd";
+import { Button, Layout } from "antd";
+import Navbar from "./components/home/Navbar";
+import MainContent from "./components/home/MainContent";
+
+const { Header, Content, Footer } = Layout;
 
 function App() {
   const count = useSelector((state) => state.counter.value);
   const dispatch = useDispatch();
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button type="primary" onClick={() => dispatch(increment())}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Layout>
+      <Header className="home-header">
+        <Navbar />
+      </Header>
+      <Content className="home-content">
+        <MainContent />
+      </Content>
+      <Footer className="home-footer">
+        Quest Colombo ©{new Date().getFullYear()} Created by Quest Colombo
+      </Footer>
+    </Layout>
   );
 }
 
