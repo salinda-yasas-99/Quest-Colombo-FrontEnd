@@ -1,0 +1,30 @@
+.user-dashbaord-layout-header {
+  display: flex;
+  align-items: center;
+}
+
+.user-dashbaord-layout-logo-image {
+  height: 50px;
+}
+
+.user-dashbaord-layout-menu {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-dashbaord-layout-avatar {
+  background-color: #00b96b;
+}
+
+.user-dashbaord-layout-content-container {
+  padding: 20px 48px;
+}
+
+.user-dashbaord-layout-content {
+  min-height: 400px;
+  padding: 24px;
+}
+
+.user-dashbaord-layout-footer {
+  text-align: center;
+}

@@ -3,11 +3,22 @@ import { Button, Layout, Menu } from "antd";
 import Logo from "../../assets/logo.png";
 import { UserOutlined } from "@ant-design/icons";
 import { NAVBAR_MENU_ITEMS } from "../../constants/constants";
+import LoginRegisterModal from "./LoginRegisterModal";
 
 const { Header } = Layout;
 
 const Navbar = () => {
   const [current, setCurrent] = useState(NAVBAR_MENU_ITEMS[0].key);
+  const [open, setOpen] = useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
 
   return (
     <>
@@ -26,14 +37,15 @@ const Navbar = () => {
       />
       <div className="navbar-btn-container">
         <Button
-          //   className="login-register-btn"
           type="primary"
           shape="round"
           icon={<UserOutlined />}
+          onClick={showModal}
         >
           Login / Register
         </Button>
       </div>
+      <LoginRegisterModal open={open} handleCancel={handleCancel} />
     </>
   );
 };
