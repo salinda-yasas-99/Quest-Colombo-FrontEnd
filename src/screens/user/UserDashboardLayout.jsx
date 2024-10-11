@@ -1,31 +1,35 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Dropdown,
-  Layout,
-  Menu,
-  Modal,
-  Space,
-  theme,
-  Typography,
-} from "antd";
+import { Avatar, Dropdown, Layout, Menu, Modal, Space, theme } from "antd";
 import Logo from "../../assets/logo.png";
 import { ExclamationCircleOutlined, UserOutlined } from "@ant-design/icons";
 import "../../styles/user-dashboard-layout.styles.css";
 import UserProtectedRoute from "../../components/user/UserProtectedRoute";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/userSlice";
+import { Outlet, redirect, useNavigate } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
-
-const navItems = [];
 
 const UserDashboardLayout = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [modal, contextHolder] = Modal.useModal();
+
+  const goToProfile = () => {
+    navigate("/user-dashboard/user-profile");
+  };
+
+  const goToHome = () => {
+    navigate("/user-dashboard");
+  };
+
+  const goToBookings = () => {
+    navigate("/user-dashboard/bookings");
+  };
+
   const confirmLogout = () => {
     modal.confirm({
       title: "Confirm",
@@ -50,11 +54,25 @@ const UserDashboardLayout = () => {
     {
       key: "2",
       label: "Profile",
+      onClick: goToProfile,
     },
     {
       key: "3",
       label: "Logout",
       onClick: confirmLogout,
+    },
+  ];
+
+  const navItems = [
+    {
+      key: "1",
+      label: "Home",
+      onClick: goToHome,
+    },
+    {
+      key: "2",
+      label: "Bookings",
+      onClick: goToBookings,
     },
   ];
 
@@ -68,7 +86,7 @@ const UserDashboardLayout = () => {
             src={Logo}
             alt="logo-image"
           />
-          <Typography style={{ color: "white" }}>Quest Colombo</Typography>
+          {/* <Typography style={{ color: "white" }}>Quest Colombo</Typography> */}
 
           <Menu
             className="user-dashbaord-layout-menu"
@@ -101,7 +119,7 @@ const UserDashboardLayout = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            Content
+            <Outlet />
           </div>
         </Content>
         <Footer className="user-dashbaord-layout-footer">

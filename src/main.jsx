@@ -11,6 +11,9 @@ import PageNotFound from "./screens/PageNotFound.jsx";
 import UserDashboardLayout from "./screens/user/UserDashboardLayout.jsx";
 import AdminLoginScreen from "./screens/admin/AdminLoginScreen.jsx";
 import AdminDashboardLayout from "./screens/admin/AdminDashboardLayout.jsx";
+import UserDashboardMainScreen from "./screens/user/UserDashboardMainScreen.jsx";
+import UserProfileScreen from "./screens/user/UserProfileScreen.jsx";
+import UserBookings from "./screens/user/UserBookings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,20 @@ const router = createBrowserRouter([
     path: "/user-dashboard",
     element: <UserDashboardLayout />,
     errorElement: <PageNotFound />,
+    children: [
+      {
+        path: "",
+        element: <UserDashboardMainScreen />,
+      },
+      {
+        path: "user-profile",
+        element: <UserProfileScreen />,
+      },
+      {
+        path: "bookings",
+        element: <UserBookings />,
+      },
+    ],
   },
   {
     path: "/admin-login",

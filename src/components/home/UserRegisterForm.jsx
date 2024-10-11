@@ -119,7 +119,7 @@ const UserRegisterForm = () => {
           <Input.Password
             prefix={<LockOutlined />}
             type="password"
-            placeholder="Password"
+            placeholder="Confirm Password"
           />
         </Form.Item>
 
