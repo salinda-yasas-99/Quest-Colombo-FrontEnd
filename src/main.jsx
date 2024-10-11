@@ -11,6 +11,12 @@ import PageNotFound from "./screens/PageNotFound.jsx";
 import UserDashboardLayout from "./screens/user/UserDashboardLayout.jsx";
 import AdminLoginScreen from "./screens/admin/AdminLoginScreen.jsx";
 import AdminDashboardLayout from "./screens/admin/AdminDashboardLayout.jsx";
+import UserDashboardMainScreen from "./screens/user/UserDashboardMainScreen.jsx";
+import UserProfileScreen from "./screens/user/UserProfileScreen.jsx";
+import UserBookings from "./screens/user/UserBookings.jsx";
+import AdminDashboardMainScreen from "./screens/admin/AdminDashboardMainScreen.jsx";
+import AdminProfileScreen from "./screens/admin/AdminProfileScreen.jsx";
+import AdminBookings from "./screens/admin/AdminBookings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +28,20 @@ const router = createBrowserRouter([
     path: "/user-dashboard",
     element: <UserDashboardLayout />,
     errorElement: <PageNotFound />,
+    children: [
+      {
+        path: "",
+        element: <UserDashboardMainScreen />,
+      },
+      {
+        path: "user-profile",
+        element: <UserProfileScreen />,
+      },
+      {
+        path: "bookings",
+        element: <UserBookings />,
+      },
+    ],
   },
   {
     path: "/admin-login",
@@ -32,6 +52,20 @@ const router = createBrowserRouter([
     path: "/admin-dashboard",
     element: <AdminDashboardLayout />,
     errorElement: <PageNotFound />,
+    children: [
+      {
+        path: "",
+        element: <AdminDashboardMainScreen />,
+      },
+      {
+        path: "admin-profile",
+        element: <AdminProfileScreen />,
+      },
+      {
+        path: "bookings",
+        element: <AdminBookings />,
+      },
+    ],
   },
 ]);
 
@@ -45,7 +79,7 @@ createRoot(document.getElementById("root")).render(
             borderRadius: 2,
 
             colorBgContainer: "#f6ffed",
-            borderRadiusLG: 12,
+            borderRadiusLG: 4,
           },
         }}
       >

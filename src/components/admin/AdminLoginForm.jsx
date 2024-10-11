@@ -1,12 +1,16 @@
-import React, { useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, notification } from "antd";
+import { Button, Form, Input, notification, Typography } from "antd";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { userLogin } from "../../services/authService";
-import { useDispatch } from "react-redux";
-import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
+import { loginStart, loginSuccess } from "../../redux/userSlice";
+import AdminLoginImg from "../../assets/innovation-pana.svg";
+import "../../styles/admin.styles.css";
 
-const UserLoginForm = () => {
+const { Title, Text } = Typography;
+
+const AdminLoginForm = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
@@ -28,7 +32,7 @@ const UserLoginForm = () => {
 
       if (response.user) {
         dispatch(loginSuccess(response.user));
-        navigate("/user-dashboard");
+        navigate("/admin-dashboard");
       }
     } catch (error) {
       openNotificationWithIcon(
@@ -44,18 +48,36 @@ const UserLoginForm = () => {
   };
 
   return (
-    <>
+    <div
+      className="admin-login-container"
+      style={{
+        display: "flex",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {contextHolder}
+
+      <img
+        className="admin-login-image"
+        src={AdminLoginImg}
+        alt="admin-login-img"
+      />
       <Form
-        name="login"
+        name="admin-login"
         initialValues={{
           remember: true,
         }}
         style={{
-          maxWidth: "100%",
+          minWidth: "400px",
         }}
         onFinish={onFinish}
       >
+        <Title level={3}>Admin Login</Title>
+        <Text type="secondary">
+          Please enter your credentials to access the admin dashboard.
+        </Text>
         <Form.Item
           name="email"
           rules={[
@@ -91,8 +113,8 @@ const UserLoginForm = () => {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 };
 
-export default UserLoginForm;
+export default AdminLoginForm;

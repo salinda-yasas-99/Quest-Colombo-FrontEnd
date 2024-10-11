@@ -1,3 +1,7 @@
+.user-dashboard-layout {
+  height: 100vh;
+}
+
 .user-dashbaord-layout-header {
   display: flex;
   align-items: center;
@@ -17,11 +21,14 @@
 }
 
 .user-dashbaord-layout-content-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   padding: 20px 48px;
 }
 
 .user-dashbaord-layout-content {
-  min-height: 400px;
+  flex-grow: 1;
   padding: 24px;
 }
 
