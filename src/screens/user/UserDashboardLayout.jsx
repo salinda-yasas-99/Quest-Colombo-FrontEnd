@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Avatar, Dropdown, Layout, Menu, Modal, Space, theme } from "antd";
 import Logo from "../../assets/logo.png";
 import { ExclamationCircleOutlined, UserOutlined } from "@ant-design/icons";
@@ -6,7 +6,7 @@ import "../../styles/user-dashboard-layout.styles.css";
 import UserProtectedRoute from "../../components/user/UserProtectedRoute";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/userSlice";
-import { Outlet, redirect, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
 
@@ -42,6 +42,7 @@ const UserDashboardLayout = () => {
       },
     });
   };
+
   const profileItems = [
     {
       key: "1",
@@ -86,8 +87,6 @@ const UserDashboardLayout = () => {
             src={Logo}
             alt="logo-image"
           />
-          {/* <Typography style={{ color: "white" }}>Quest Colombo</Typography> */}
-
           <Menu
             className="user-dashbaord-layout-menu"
             theme="dark"

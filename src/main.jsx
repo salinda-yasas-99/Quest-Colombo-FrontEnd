@@ -14,6 +14,9 @@ import AdminDashboardLayout from "./screens/admin/AdminDashboardLayout.jsx";
 import UserDashboardMainScreen from "./screens/user/UserDashboardMainScreen.jsx";
 import UserProfileScreen from "./screens/user/UserProfileScreen.jsx";
 import UserBookings from "./screens/user/UserBookings.jsx";
+import AdminDashboardMainScreen from "./screens/admin/AdminDashboardMainScreen.jsx";
+import AdminProfileScreen from "./screens/admin/AdminProfileScreen.jsx";
+import AdminBookings from "./screens/admin/AdminBookings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +52,20 @@ const router = createBrowserRouter([
     path: "/admin-dashboard",
     element: <AdminDashboardLayout />,
     errorElement: <PageNotFound />,
+    children: [
+      {
+        path: "",
+        element: <AdminDashboardMainScreen />,
+      },
+      {
+        path: "admin-profile",
+        element: <AdminProfileScreen />,
+      },
+      {
+        path: "bookings",
+        element: <AdminBookings />,
+      },
+    ],
   },
 ]);
 
