@@ -1,56 +1,114 @@
-import React from "react";
-import { Avatar, Breadcrumb, Layout, Menu, theme } from "antd";
+import React, { useState } from "react";
+import {
+  Avatar,
+  Dropdown,
+  Layout,
+  Menu,
+  Modal,
+  Space,
+  theme,
+  Typography,
+} from "antd";
 import Logo from "../../assets/logo.png";
-import { UserOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined, UserOutlined } from "@ant-design/icons";
 import "../../styles/user-dashboard-layout.styles.css";
+import UserProtectedRoute from "../../components/user/UserProtectedRoute";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/userSlice";
+
 const { Header, Content, Footer } = Layout;
 
-const items = new Array(15).fill(null).map((_, index) => ({
-  key: index + 1,
-  label: `nav ${index + 1}`,
-}));
+const navItems = [];
 
 const UserDashboardLayout = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const dispatch = useDispatch();
+  const [modal, contextHolder] = Modal.useModal();
+  const confirmLogout = () => {
+    modal.confirm({
+      title: "Confirm",
+      icon: <ExclamationCircleOutlined />,
+      content: "Do you want to logout from the session?",
+      okText: "Logout",
+      cancelText: "cancel",
+      onOk: () => {
+        dispatch(logout());
+      },
+    });
+  };
+  const profileItems = [
+    {
+      key: "1",
+      label: "My Account",
+      disabled: true,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "2",
+      label: "Profile",
+    },
+    {
+      key: "3",
+      label: "Logout",
+      onClick: confirmLogout,
+    },
+  ];
+
   return (
-    <Layout>
-      <Header className="user-dashbaord-layout-header">
-        <img
-          className="user-dashbaord-layout-logo-image"
-          src={Logo}
-          alt="logo-image"
-        />
+    <UserProtectedRoute>
+      {contextHolder}
+      <Layout className="user-dashboard-layout">
+        <Header className="user-dashbaord-layout-header">
+          <img
+            className="user-dashbaord-layout-logo-image"
+            src={Logo}
+            alt="logo-image"
+          />
+          <Typography style={{ color: "white" }}>Quest Colombo</Typography>
 
-        <Menu
-          className="user-dashbaord-layout-menu"
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items}
-        />
+          <Menu
+            className="user-dashbaord-layout-menu"
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["1"]}
+            items={navItems}
+          />
 
-        <Avatar
-          className="user-dashbaord-layout-avatar"
-          icon={<UserOutlined />}
-        />
-      </Header>
-      <Content className="user-dashbaord-layout-content-container">
-        <div
-          className="user-dashbaord-layout-content"
-          style={{
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          Content
-        </div>
-      </Content>
-      <Footer className="user-dashbaord-layout-footer">
-        Quest Colombo ©{new Date().getFullYear()} Created by Quest Colombo
-      </Footer>
-    </Layout>
+          <Dropdown
+            menu={{
+              items: profileItems,
+            }}
+          >
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <Avatar
+                  className="user-dashbaord-layout-avatar"
+                  icon={<UserOutlined />}
+                />
+              </Space>
+            </a>
+          </Dropdown>
+        </Header>
+        <Content className="user-dashbaord-layout-content-container">
+          <div
+            className="user-dashbaord-layout-content"
+            style={{
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            Content
+          </div>
+        </Content>
+        <Footer className="user-dashbaord-layout-footer">
+          Quest Colombo ©{new Date().getFullYear()} Created by Quest Colombo
+        </Footer>
+      </Layout>
+    </UserProtectedRoute>
   );
 };
 

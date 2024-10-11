@@ -45,7 +45,7 @@ createRoot(document.getElementById("root")).render(
             borderRadius: 2,
 
             colorBgContainer: "#f6ffed",
-            borderRadiusLG: 12,
+            borderRadiusLG: 4,
           },
         }}
       >
