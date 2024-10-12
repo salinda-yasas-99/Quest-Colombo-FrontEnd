@@ -37,6 +37,10 @@ const AdminDashboardLayout = () => {
     navigate("/admin-dashboard/user-management");
   };
 
+  const goToInquiry = () => {
+    navigate("/admin-dashboard/inquiry");
+  };
+
   const confirmLogout = () => {
     modal.confirm({
       title: "Confirm",
@@ -91,6 +95,11 @@ const AdminDashboardLayout = () => {
       key: "4",
       label: "Manage Users",
       onClick: goToUserManagement,
+    },
+    {
+      key: "5",
+      label: "Inquiries",
+      onClick: goToInquiry,
     },
   ];
 
