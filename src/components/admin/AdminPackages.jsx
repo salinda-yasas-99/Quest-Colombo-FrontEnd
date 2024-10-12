@@ -28,6 +28,7 @@ const AdminPackages = () => {
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+  const [isCreateLoading, setIsCreateLoading] = useState(false);
 
   const handleDelete = async (id) => {
     try {
@@ -78,6 +79,7 @@ const AdminPackages = () => {
   };
 
   const handleCreatePackage = async (values) => {
+    setIsCreateLoading(true);
     try {
       const response = await createPackage(values); // Send API request to create the package
       openNotificationWithIcon(
@@ -86,8 +88,7 @@ const AdminPackages = () => {
         "Package created successfully"
       );
       setPackages((prevPackages) => [...prevPackages, response]);
-      setIsCreateModalVisible(false); // Close modal
-      console.log(response);
+      setIsCreateModalVisible(false);
     } catch (error) {
       openNotificationWithIcon(
         "error",
@@ -96,6 +97,7 @@ const AdminPackages = () => {
       );
       console.error("Error occurred while creating package: ", error);
     } finally {
+      setIsCreateLoading(false);
       form.resetFields();
     }
   };
@@ -182,6 +184,7 @@ const AdminPackages = () => {
         isCreateModalVisible={isCreateModalVisible}
         setIsCreateModalVisible={setIsCreateModalVisible}
         handleCreatePackage={handleCreatePackage}
+        isCreateLoading={isCreateLoading}
       />
     </div>
   );
