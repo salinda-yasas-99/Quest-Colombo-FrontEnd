@@ -21,12 +21,20 @@ const AdminDashboardLayout = () => {
     navigate("/admin-dashboard/admin-profile");
   };
 
-  const goToHome = () => {
+  const goToWorkspaces = () => {
     navigate("/admin-dashboard");
   };
 
   const goToBookings = () => {
     navigate("/admin-dashboard/bookings");
+  };
+
+  const goToPackages = () => {
+    navigate("/admin-dashboard/packages");
+  };
+
+  const goToUserManagement = () => {
+    navigate("/admin-dashboard/user-management");
   };
 
   const confirmLogout = () => {
@@ -66,13 +74,23 @@ const AdminDashboardLayout = () => {
   const navItems = [
     {
       key: "1",
-      label: "Home",
-      onClick: goToHome,
+      label: "Workspaces",
+      onClick: goToWorkspaces,
     },
     {
       key: "2",
+      label: "Packages",
+      onClick: goToPackages,
+    },
+    {
+      key: "3",
       label: "Bookings",
       onClick: goToBookings,
+    },
+    {
+      key: "4",
+      label: "Manage Users",
+      onClick: goToUserManagement,
     },
   ];
 
@@ -120,9 +138,6 @@ const AdminDashboardLayout = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer className="user-dashbaord-layout-footer">
-          Quest Colombo ©{new Date().getFullYear()} Created by Quest Colombo
-        </Footer>
       </Layout>
     </AdminProtectedRoute>
   );

@@ -16,11 +16,13 @@ import UserProfileScreen from "./screens/user/UserProfileScreen.jsx";
 import UserBookings from "./screens/user/UserBookings.jsx";
 import AdminDashboardMainScreen from "./screens/admin/AdminDashboardMainScreen.jsx";
 import AdminProfileScreen from "./screens/admin/AdminProfileScreen.jsx";
-import AdminBookings from "./screens/admin/AdminBookings.jsx";
 import UserWorkspacesByTypeScreen from "./screens/user/UserWorkspacesByTypeScreen.jsx";
 import UserWorkspaceScreen from "./screens/user/UserWorkspaceScreen.jsx";
 import UserCreateBookingScreen from "./screens/user/UserCreateBookingScreen.jsx";
 import UserSingleBookingScreen from "./screens/user/UserSingleBookingScreen.jsx";
+import AdminBookingListScreen from "./screens/admin/AdminBookingListScreen.jsx";
+import AdminPackagesScreen from "./screens/admin/AdminPackagesScreen.jsx";
+import AdminUserManagementScreen from "./screens/admin/AdminUserManagementScreen.jsx";
 
 const router = createBrowserRouter([
   {
@@ -83,7 +85,15 @@ const router = createBrowserRouter([
       },
       {
         path: "bookings",
-        element: <AdminBookings />,
+        element: <AdminBookingListScreen />,
+      },
+      {
+        path: "packages",
+        element: <AdminPackagesScreen />,
+      },
+      {
+        path: "user-management",
+        element: <AdminUserManagementScreen />,
       },
     ],
   },
