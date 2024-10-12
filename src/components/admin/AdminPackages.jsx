@@ -88,7 +88,7 @@ const AdminPackages = () => {
         "Package created successfully"
       );
       setPackages((prevPackages) => [...prevPackages, response]);
-      setIsCreateModalVisible(false); // Close modal
+      setIsCreateModalVisible(false);
     } catch (error) {
       openNotificationWithIcon(
         "error",
