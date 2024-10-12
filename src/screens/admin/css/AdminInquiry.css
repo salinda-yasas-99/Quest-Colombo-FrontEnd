@@ -2,7 +2,7 @@
 
 /* Table header background color */
 .ant-table-thead > tr > th {
-  background-color: #0a9a7d !important; /* Dark blue header background */
+  background-color: #00b96b !important; /* Dark blue header background */
   color: #fcf7f7 !important; /* Red header text color */
 }
 
