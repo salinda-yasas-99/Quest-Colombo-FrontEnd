@@ -20,7 +20,7 @@ const UserWorkspaceTypes = () => {
 
   const onCardClick = (workspaceType) => {
     // Navigate to the page corresponding to the workspace type
-    navigate(`workspaces/${workspaceType.id}`);
+    navigate(`workspace-types/${workspaceType.id}`);
   };
   return (
     <div>

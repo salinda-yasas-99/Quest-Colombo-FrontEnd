@@ -18,6 +18,9 @@ import AdminDashboardMainScreen from "./screens/admin/AdminDashboardMainScreen.j
 import AdminProfileScreen from "./screens/admin/AdminProfileScreen.jsx";
 import AdminBookings from "./screens/admin/AdminBookings.jsx";
 import UserWorkspacesByTypeScreen from "./screens/user/UserWorkspacesByTypeScreen.jsx";
+import UserWorkspaceScreen from "./screens/user/UserWorkspaceScreen.jsx";
+import UserCreateBookingScreen from "./screens/user/UserCreateBookingScreen.jsx";
+import UserSingleBookingScreen from "./screens/user/UserSingleBookingScreen.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,8 +46,20 @@ const router = createBrowserRouter([
         element: <UserBookings />,
       },
       {
-        path: "workspaces/:workspaceType",
+        path: "workspace-types/:workspaceType",
         element: <UserWorkspacesByTypeScreen />,
+      },
+      {
+        path: "workspace-types/:workspaceType/:workspaceId",
+        element: <UserWorkspaceScreen />,
+      },
+      {
+        path: "workspace-types/:workspaceType/:workspaceId/create-booking",
+        element: <UserCreateBookingScreen />,
+      },
+      {
+        path: "bookings/:bookingId",
+        element: <UserSingleBookingScreen />,
       },
     ],
   },
