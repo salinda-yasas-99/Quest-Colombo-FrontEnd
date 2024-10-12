@@ -7,6 +7,7 @@ const CreateNewPackageModal = ({
   isCreateModalVisible,
   setIsCreateModalVisible,
   handleCreatePackage,
+  isCreateLoading,
 }) => {
   return (
     <Modal
@@ -25,7 +26,7 @@ const CreateNewPackageModal = ({
         onFinish={handleCreatePackage}
         initialValues={{
           package_name: "",
-          details: [],
+          details: [" "],
           price: 0,
         }}
       >
@@ -54,7 +55,7 @@ const CreateNewPackageModal = ({
               {fields.map((field, index) => (
                 <Form.Item
                   label={index === 0 ? "Details" : ""}
-                  required={false}
+                  required={true}
                   key={field.key}
                 >
                   <Form.Item
@@ -113,7 +114,12 @@ const CreateNewPackageModal = ({
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ width: "100%" }}
+            loading={isCreateLoading}
+          >
             Create Package
           </Button>
         </Form.Item>
