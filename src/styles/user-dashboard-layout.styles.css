@@ -25,11 +25,13 @@
   flex-direction: column;
   flex-grow: 1;
   padding: 20px 48px;
+  overflow: hidden;
 }
 
 .user-dashbaord-layout-content {
   flex-grow: 1;
   padding: 24px;
+  overflow-y: auto;
 }
 
 .user-dashbaord-layout-footer {

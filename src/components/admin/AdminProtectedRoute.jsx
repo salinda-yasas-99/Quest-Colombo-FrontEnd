@@ -10,10 +10,10 @@ import { Navigate } from "react-router-dom";
 
 const AdminProtectedRoute = ({ children }) => {
   const user = useSelector((state) => state.user.user);
-  const tokan = getToken();
+  const token = getToken();
   const localUser = getUser();
 
-  if (!user && user?.role !== "admin" && !tokan && !localUser) {
+  if (!user || user?.role !== "admin" || (!token && !localUser)) {
     removeToken();
     removeUser();
     return <Navigate to="/admin-login" />;

@@ -121,9 +121,9 @@ const UserDashboardLayout = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer className="user-dashbaord-layout-footer">
+        {/* <Footer className="user-dashbaord-layout-footer">
           Quest Colombo ©{new Date().getFullYear()} Created by Quest Colombo
-        </Footer>
+        </Footer> */}
       </Layout>
     </UserProtectedRoute>
   );

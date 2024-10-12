@@ -17,6 +17,7 @@ import UserBookings from "./screens/user/UserBookings.jsx";
 import AdminDashboardMainScreen from "./screens/admin/AdminDashboardMainScreen.jsx";
 import AdminProfileScreen from "./screens/admin/AdminProfileScreen.jsx";
 import AdminBookings from "./screens/admin/AdminBookings.jsx";
+import UserWorkspacesByTypeScreen from "./screens/user/UserWorkspacesByTypeScreen.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "bookings",
         element: <UserBookings />,
+      },
+      {
+        path: "workspaces/:workspaceType",
+        element: <UserWorkspacesByTypeScreen />,
       },
     ],
   },
