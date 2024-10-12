@@ -26,7 +26,7 @@ const CreateNewPackageModal = ({
         onFinish={handleCreatePackage}
         initialValues={{
           package_name: "",
-          details: [],
+          details: [" "],
           price: 0,
         }}
       >
@@ -55,7 +55,7 @@ const CreateNewPackageModal = ({
               {fields.map((field, index) => (
                 <Form.Item
                   label={index === 0 ? "Details" : ""}
-                  required={false}
+                  required={true}
                   key={field.key}
                 >
                   <Form.Item

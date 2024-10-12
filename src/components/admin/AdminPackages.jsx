@@ -89,7 +89,6 @@ const AdminPackages = () => {
       );
       setPackages((prevPackages) => [...prevPackages, response]);
       setIsCreateModalVisible(false); // Close modal
-      console.log(response);
     } catch (error) {
       openNotificationWithIcon(
         "error",
