@@ -18,13 +18,6 @@ const UserProfileScreen = () => {
             backgroundColor: "white",
           }}
         >
-          {/* Avatar */}
-          {/* <Avatar
-            size={120}
-            src={`https://ui-avatars.com/api/?name=${user.username}&background=random`}
-            style={{ marginBottom: "20px" }}
-          /> */}
-
           <Avatar
             style={{
               backgroundColor: "#00b96b",

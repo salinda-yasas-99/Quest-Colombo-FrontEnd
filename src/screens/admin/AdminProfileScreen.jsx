@@ -1,7 +1,10 @@
+import { Card, Col, List, Row, Typography } from "antd";
 import React from "react";
 
 const AdminProfileScreen = () => {
-  return <div>AdminProfileScreen</div>;
+  const { Title } = Typography;
+
+  return <div></div>;
 };
 
 export default AdminProfileScreen;
