@@ -20,7 +20,7 @@ export const createFeedBack = async (data) => {
   }
 };
 
-export const deletePackageById = async (id) => {
+export const deleteInquiryById = async (id) => {
   try {
     const response = await privateAxios.delete(`/api/feedback/${id}`);
     console.log("responses: service::", response);

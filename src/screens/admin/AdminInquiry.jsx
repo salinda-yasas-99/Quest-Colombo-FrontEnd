@@ -1,26 +1,48 @@
-import { Col, Row, Typography, Button, Table } from "antd";
+import { Col, Row, Typography, Button, Table, Popconfirm, message } from "antd";
 import React, { useEffect, useState } from "react";
 import "./css/AdminInquiry.css";
-import { getAllFeedBacks } from "../../services/feedBackService";
+import {
+  deleteInquiryById,
+  getAllFeedBacks,
+} from "../../services/feedBackService";
 
 const AdminInquiry = () => {
   const { Title } = Typography;
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const fetchInquiries = async () => {
-    //setIsLoading(true);
+    setLoading(true); // Set loading to true before fetching
     try {
       const response = await getAllFeedBacks();
-      console.log("this is laki", response);
       if (response !== undefined) {
-        setData(response);
+        const feedbackData = response.map((item) => ({
+          ...item,
+          key: item.id, // Make sure the table rows have a unique key
+        }));
+        setData(feedbackData);
       }
     } catch (error) {
-      console.error("Error fetching departments:", error);
-      // } finally {
-      //   setIsLoading(false);
-      // }
+      console.error("Error fetching inquiries:", error);
+    } finally {
+      setLoading(false); // Set loading to false after fetching
     }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteInquiryById(id);
+      message.success("Inquiry deleted successfully");
+      // Refresh the table data after deletion
+      fetchInquiries();
+    } catch (error) {
+      console.error("Error deleting inquiry:", error);
+      message.error("There was an error deleting the inquiry.");
+    }
+  };
+
+  const cancel = () => {
+    message.error("Action canceled");
   };
 
   const columns = [
@@ -46,36 +68,24 @@ const AdminInquiry = () => {
     },
     {
       title: "Action",
-      dataIndex: "",
-      key: "x",
-      render: () => <a>Delete</a>,
+      key: "action",
+      render: (text, record) => (
+        <Popconfirm
+          title="Are you sure to delete this inquiry?"
+          onConfirm={() => handleDelete(record.id)}
+          onCancel={cancel}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button danger>Delete</Button>
+        </Popconfirm>
+      ),
     },
   ];
 
   useEffect(() => {
     fetchInquiries();
   }, []);
-
-  //   const data = [
-  //     {
-  //       key: "1",
-  //       name: "John Brown",
-  //       money: "￥300,000.00",
-  //       address: "New York No. 1 Lake Park",
-  //     },
-  //     {
-  //       key: "2",
-  //       name: "Jim Green",
-  //       money: "￥1,256,000.00",
-  //       address: "London No. 1 Lake Park",
-  //     },
-  //     {
-  //       key: "3",
-  //       name: "Joe Black",
-  //       money: "￥120,000.00",
-  //       address: "Sydney No. 1 Lake Park",
-  //     },
-  //   ];
 
   return (
     <div>
@@ -92,7 +102,7 @@ const AdminInquiry = () => {
         dataSource={data}
         bordered
         pagination={false}
-        //title={() => "Header"}
+        loading={loading} // Add loading prop here
       />
     </div>
   );
