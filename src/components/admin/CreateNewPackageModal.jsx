@@ -7,6 +7,7 @@ const CreateNewPackageModal = ({
   isCreateModalVisible,
   setIsCreateModalVisible,
   handleCreatePackage,
+  isCreateLoading,
 }) => {
   return (
     <Modal
@@ -113,7 +114,12 @@ const CreateNewPackageModal = ({
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ width: "100%" }}
+            loading={isCreateLoading}
+          >
             Create Package
           </Button>
         </Form.Item>
