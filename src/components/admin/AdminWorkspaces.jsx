@@ -69,7 +69,8 @@ const AdminWorkspaces = () => {
         "Workspace created successfully"
       );
       console.log(response);
-      setWorkspaces((prevTypes) => [...prevTypes, response]);
+      fetchAllworkspaces();
+      // setWorkspaces((prevTypes) => [...prevTypes, response]);
       setIsCreateModalVisible(false);
     } catch (error) {
       openNotificationWithIcon(
