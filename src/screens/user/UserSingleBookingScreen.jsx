@@ -1,3 +1,4 @@
+import { LeftOutlined } from "@ant-design/icons";
 import { Button, Col, Empty, Form, Input, Row, Typography } from "antd";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -125,6 +126,7 @@ const UserSingleBookingScreen = () => {
           <Button
             type="primary"
             onClick={() => navigate("/user-dashboard/bookings")}
+            icon={<LeftOutlined />}
           >
             Back to Bookings
           </Button>
