@@ -29,3 +29,23 @@ export const userRegister = async (userDetails) => {
     throw error.response ? error.response : error;
   }
 };
+
+export const confirmEmail = async (email) => {
+  try {
+    const response = await publicAxios.post("/api/otp", email);
+
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response : error;
+  }
+};
+
+export const resetPassword = async (details) => {
+  try {
+    const response = await publicAxios.post("/api/reset-password", details);
+
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response : error;
+  }
+};
