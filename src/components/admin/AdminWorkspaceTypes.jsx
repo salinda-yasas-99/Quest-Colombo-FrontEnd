@@ -1,4 +1,4 @@
-import { DeleteOutlined, PlusOutlined, RightOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -10,7 +10,7 @@ import {
   Spin,
   Typography,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createWorkspaceType,
   deleteWorkspaceTypeById,
@@ -155,6 +155,7 @@ const AdminWorkspaceTypes = () => {
                   }}
                   actions={[
                     <Popconfirm
+                      key={workspaceType.id}
                       title="Delete the Workspace Type"
                       description="Are you sure to delete this type?"
                       onConfirm={() => handleDelete(workspaceType.id)}

@@ -9,6 +9,20 @@ export const getAllWorkspaces = async () => {
   }
 };
 
+export const getWorkspacesByTypeAndDate = async (workspace_type, date) => {
+  try {
+    const response = await privateAxios.get("/api/workSpacesByDate", {
+      params: {
+        workspace_type,
+        date,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response : error;
+  }
+};
+
 export const createWorkspace = async (data) => {
   try {
     const response = await privateAxios.post("/api/workSpaces", data);
