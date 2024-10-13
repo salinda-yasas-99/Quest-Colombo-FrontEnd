@@ -1,5 +1,4 @@
 import { Form, Input, Modal } from "antd";
-import React from "react";
 
 const CreateWorkspaceTypeModal = ({
   isCreateModalVisible,
