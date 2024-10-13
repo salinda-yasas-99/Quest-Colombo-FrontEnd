@@ -17,6 +17,9 @@ import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import Image360Viewer from "../../components/user/Image360Viewer";
 import { getAllPackages } from "../../services/packagesService";
+import { useSelector } from "react-redux";
+import StripeCheckout from "react-stripe-checkout";
+import { createBooking } from "../../services/bookingService";
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -29,10 +32,127 @@ const UserWorkspaceScreen = () => {
   const [packageLoading, setPackageLoading] = useState(false);
   const [packages, setPackages] = useState([]);
   const [api, contextHolder] = notification.useNotification();
+  const loggedUser = useSelector((state) => state.user.user);
+  const [stripeToken, setStripeToken] = useState(null);
+  const [selectedBookingData, setSelectedBookingData] = useState(null);
+
+  const KEY =
+    "pk_test_51PZDQYGtHEDchr7LN5VKrI4bTTedKBTYHe1KqSchbR8r8IteKIrjob2qLx71GnsjAQbp27jHd0vu0c2omHSxtE2C00MlvZAAUF";
+
+  const onToken = (token) => {
+    console.log("This is stripe token", token);
+    setStripeToken(token);
+  };
+
+  const getTotalAmount = () => {
+    const result = packages.find((pkg) => pkg.id === selectedPackage);
+    const totalCharges =
+      parseFloat(workspace.fee) + (result ? parseFloat(result.price) : 0);
+    return totalCharges;
+  };
 
   const onFinish = async (values) => {
-    console.log("create booking form values::", values);
+    // Construct the new object with the form values
+
+    const result = packages.find((pkg) => pkg.id === selectedPackage);
+
+    let bookingStart = "";
+    let bookingEnd = "";
+
+    if (values.bookedSlot === "slot_1") {
+      bookingStart = "10:00:00";
+      bookingEnd = "12:00:00";
+    }
+    if (values.bookedSlot === "slot_2") {
+      bookingStart = "13:00:00";
+      bookingEnd = "15:00:00";
+    }
+    if (values.bookedSlot === "slot_3") {
+      bookingStart = "17:00:00";
+      bookingEnd = "19:00:00";
+    }
+
+    const totalCharges =
+      parseFloat(workspace.fee) + (result ? parseFloat(result.price) : 0);
+
+    console.log("This is package", result);
+    console.log("This is booking start", bookingStart);
+    console.log("This is booking end", bookingEnd);
+
+    const bookingData = {
+      // Assuming workspace ID exists
+      totalCharges: totalCharges,
+      bookedDate: values.bookedDate.format("YYYY-MM-DD"), // Formatting the date
+      bookedTime: dayjs().format("HH:mm:ss"),
+      paymentMethod: "Online",
+      paymentStatus: "Paid",
+      bookedSlot: values.bookedSlot,
+      startTime: bookingStart,
+      endTime: bookingEnd,
+      user_id: loggedUser.id,
+      workspace_id: workspace.id,
+      //stripeToken: stripeToken.id,
+      package_id: selectedPackage ? selectedPackage : null,
+    };
+
+    // Log the constructed object (for testing purposes)
+    console.log("Booking Data: ", bookingData);
+    //console.log("This token: ", bookingData.stripeToken);
+    setSelectedBookingData(bookingData);
   };
+
+  // useEffect(() => {
+  //   if (stripeToken && selectedBookingData) {
+  //     console.log("Success booking", selectedBookingData);
+  //     createBooking(selectedBookingData, loggedUser.id)
+  //       .then((response) => {
+  //         // Handle success, such as showing notification or redirecting user
+  //         console.log("Booking successfully created", response);
+  //         alert(response);
+  //         openNotificationWithIcon(
+  //           "success",
+  //           "Booking Successful",
+  //           "Your booking has been confirmed."
+  //         );
+  //       })
+  //       .catch((error) => {
+  //         openNotificationWithIcon(
+  //           "error",
+  //           "Booking Failed",
+  //           error?.data?.message || "An error occurred while booking"
+  //         );
+  //         console.error("Error occurred while creating booking: ", error);
+  //         alert(error);
+  //       });
+  //   }
+  // }, [stripeToken, selectedBookingData]);
+
+  // useEffect(() => {
+  //   if (stripeToken) {
+  //     onFinish();
+  //   }
+  // }, [stripeToken]);
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const bookingObj = {
+          stripeToken: stripeToken.id,
+          ...selectedBookingData,
+        };
+
+        const response = await createBooking(bookingObj, loggedUser.id);
+        console.log("order placed", response);
+        alert(response.data);
+      } catch (err) {
+        console.log(err);
+        alert(err);
+      }
+    };
+    if (stripeToken) {
+      makeRequest();
+    }
+  }, [stripeToken]);
 
   const openNotificationWithIcon = (type, message, description) => {
     api[type]({
@@ -277,9 +397,23 @@ const UserWorkspaceScreen = () => {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
-              Book Now
-            </Button>
+            <StripeCheckout
+              name="Shoe Heaven"
+              shippingAddress
+              description={`Your total is Rs.${getTotalAmount()}`}
+              amount={getTotalAmount() * 100} // Amount in cents
+              token={onToken}
+              stripeKey={KEY}
+              currency="LKR"
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ width: "100%" }}
+              >
+                Book Now
+              </Button>
+            </StripeCheckout>
           </Form.Item>
         </Form>
       </div>
