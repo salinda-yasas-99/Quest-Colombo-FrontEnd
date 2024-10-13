@@ -1,10 +1,14 @@
-import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import {
+  CodeSandboxOutlined,
+  LockOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, notification } from "antd";
 import React, { useState } from "react";
 import { resetPassword } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 
-const ResetPasswordForm = ({ setCurrent }) => {
+const ResetPasswordForm = ({ setCurrent, formDissable }) => {
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
@@ -50,6 +54,7 @@ const ResetPasswordForm = ({ setCurrent }) => {
         }}
         layout="vertical"
         onFinish={onFinish}
+        disabled={formDissable}
       >
         <Form.Item
           name="email"
@@ -122,7 +127,13 @@ const ResetPasswordForm = ({ setCurrent }) => {
           ]}
           label="OTP"
         >
-          <InputNumber min={0} length={6} style={{ width: "100%" }} />
+          <InputNumber
+            min={0}
+            length={6}
+            style={{ width: "100%" }}
+            prefix={<CodeSandboxOutlined />}
+            placeholder="OTP"
+          />
         </Form.Item>
 
         <Form.Item>

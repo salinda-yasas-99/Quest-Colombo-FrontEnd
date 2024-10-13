@@ -3,7 +3,7 @@ import { Button, Form, Input, notification } from "antd";
 import React, { useState } from "react";
 import { confirmEmail } from "../../services/authService";
 
-const ConfirmEmailForm = ({ setCurrent }) => {
+const ConfirmEmailForm = ({ setCurrent, SetFormDissable }) => {
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
 
@@ -18,9 +18,11 @@ const ConfirmEmailForm = ({ setCurrent }) => {
   const onFinish = async (values) => {
     setLoading(true);
     setCurrent(0);
+    SetFormDissable(true);
     try {
       const response = await confirmEmail(values);
       setCurrent(1);
+      SetFormDissable(false);
       openNotificationWithIcon("success", "Success", response?.message);
     } catch (error) {
       openNotificationWithIcon(
@@ -33,7 +35,7 @@ const ConfirmEmailForm = ({ setCurrent }) => {
       setLoading(false);
     }
   };
-  
+
   return (
     <>
       {contextHolder}

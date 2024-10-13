@@ -10,6 +10,7 @@ const { Title, Paragraph } = Typography;
 
 const ForgetPasswordScreen = () => {
   const [current, setCurrent] = useState(0);
+  const [formDissable, SetFormDissable] = useState(true);
 
   return (
     <div className="not-found-container">
@@ -40,11 +41,21 @@ const ForgetPasswordScreen = () => {
                 items={[
                   {
                     title: "Confirm Email",
-                    description: <ConfirmEmailForm setCurrent={setCurrent} />,
+                    description: (
+                      <ConfirmEmailForm
+                        setCurrent={setCurrent}
+                        SetFormDissable={SetFormDissable}
+                      />
+                    ),
                   },
                   {
                     title: "Reset Password",
-                    description: <ResetPasswordForm setCurrent={setCurrent} />,
+                    description: (
+                      <ResetPasswordForm
+                        setCurrent={setCurrent}
+                        formDissable={formDissable}
+                      />
+                    ),
                   },
                 ]}
               />
