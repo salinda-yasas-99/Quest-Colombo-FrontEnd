@@ -10,6 +10,16 @@ export const getAllUsers = async (role) => {
   }
 };
 
+export const getUserById = async (id) => {
+  try {
+    const response = await privateAxios.get(`api/user/${id}`);
+    console.log("responses: service::", response);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response : error;
+  }
+};
+
 export const createAdmin = async (data) => {
   try {
     const newAdmin = {
