@@ -18,89 +18,6 @@ import {} from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-const mockWorkspaceData = [
-  {
-    id: 1,
-    name: "Conference Room A",
-    description: "Spacious room with modern amenities for meetings.",
-    location: "First Floor",
-    fee: "5000.00",
-    imageUrl: "https://via.placeholder.com/200", // Placeholder image URL
-    workspace_type_id: 1,
-    workspace_type: {
-      id: 1,
-      type_name: "Conference Room",
-    },
-    slot_1: "available",
-    slot_2: "booked",
-    slot_3: "available",
-  },
-  {
-    id: 2,
-    name: "Conference Room B",
-    description: "Cozy room for team discussions and presentations.",
-    location: "Second Floor",
-    fee: "4000.00",
-    imageUrl: "https://via.placeholder.com/200",
-    workspace_type_id: 1,
-    workspace_type: {
-      id: 1,
-      type_name: "Conference Room",
-    },
-    slot_1: "booked",
-    slot_2: "booked",
-    slot_3: "available",
-  },
-  {
-    id: 3,
-    name: "Private Office A",
-    description: "Ideal for focused work or small team meetings.",
-    location: "Third Floor",
-    fee: "3000.00",
-    imageUrl: "https://via.placeholder.com/200",
-    workspace_type_id: 2,
-    workspace_type: {
-      id: 2,
-      type_name: "Private Office",
-    },
-    slot_1: "available",
-    slot_2: "available",
-    slot_3: "booked",
-  },
-  {
-    id: 4,
-    name: "Coworking Space A",
-    description: "Open-plan space with individual desks.",
-    location: "Ground Floor",
-    fee: "2000.00",
-    imageUrl: "https://via.placeholder.com/200",
-    workspace_type_id: 3,
-    workspace_type: {
-      id: 3,
-      type_name: "Coworking Space",
-    },
-    slot_1: "available",
-    slot_2: "available",
-    slot_3: "available",
-  },
-  {
-    id: 5,
-    name: "Coworking Space B",
-    description: "Shared workspace with great natural lighting.",
-    location: "Ground Floor",
-    fee: "1800.00",
-    imageUrl: "https://via.placeholder.com/200",
-    workspace_type_id: 3,
-    workspace_type: {
-      id: 3,
-      type_name: "Coworking Space",
-    },
-    slot_1: "booked",
-    slot_2: "available",
-    slot_3: "available",
-  },
-];
-
 const UserWorkspacesByTypeScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -149,9 +66,9 @@ const UserWorkspacesByTypeScreen = () => {
     setSelectedDate(date);
   };
 
-  const navigateToSingleWorkspaceView = (workspaceId) => {
+  const navigateToSingleWorkspaceView = (workspaceId, workspace) => {
     navigate(`${workspaceId}`, {
-      state: { workspaceId, selectedDate },
+      state: { workspace, formattedDate: selectedDate.format("YYYY-MM-DD") },
     });
   };
 
@@ -206,7 +123,9 @@ const UserWorkspacesByTypeScreen = () => {
                     borderRadius: "10px",
                     backgroundColor: "white",
                   }}
-                  onClick={() => navigateToSingleWorkspaceView(workspace.id)}
+                  onClick={() =>
+                    navigateToSingleWorkspaceView(workspace.id, workspace)
+                  }
                 >
                   <Title level={4}>{workspace.name}</Title>
                   <Text>{workspace.description}</Text>
