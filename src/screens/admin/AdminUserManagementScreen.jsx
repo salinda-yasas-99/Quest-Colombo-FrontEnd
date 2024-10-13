@@ -12,7 +12,11 @@ import {
   notification,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import { deleteUserById, getAllUsers } from "../../services/UserService";
+import {
+  createAdmin,
+  deleteUserById,
+  getAllUsers,
+} from "../../services/UserService";
 import { createPackage } from "../../services/packagesService";
 import CreateAdminModal from "../../components/admin/CreateAdminModal";
 
@@ -26,7 +30,7 @@ const AdminUserManagementScreen = () => {
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
-  const [packages, setPackages] = useState([]);
+  //const [packages, setPackages] = useState([]);
 
   const fetchUsers = async (role = "all") => {
     setLoading(true); // Set loading to true before fetching
@@ -54,16 +58,18 @@ const AdminUserManagementScreen = () => {
     });
   };
 
-  const handleCreatePackage = async (values) => {
+  const handleAdminRegister = async (values) => {
     //setIsCreateLoading(true);
     try {
-      const response = await createPackage(values); // Send API request to create the package
+      console.log("This user page admin", values);
+      const response = await createAdmin(values);
       openNotificationWithIcon(
         "success",
         "Success",
-        "Package created successfully"
+        "Admin registered successfully"
       );
-      setPackages((prevPackages) => [...prevPackages, response]);
+      //setPackages((prevPackages) => [...prevPackages, response]);
+      fetchUsers();
       setIsCreateModalVisible(false);
     } catch (error) {
       openNotificationWithIcon(
@@ -142,6 +148,13 @@ const AdminUserManagementScreen = () => {
 
   return (
     <div>
+      <CreateAdminModal
+        form={form}
+        isCreateModalVisible={isCreateModalVisible}
+        setIsCreateModalVisible={setIsCreateModalVisible}
+        handleAdminRegister={handleAdminRegister}
+        //isCreateLoading={isCreateLoading}
+      />
       <Row
         justify="space-between"
         style={{ marginBottom: "30px", display: "flex", alignItems: "center" }}
@@ -175,13 +188,6 @@ const AdminUserManagementScreen = () => {
         bordered
         pagination={false}
         loading={loading} // Add loading prop here
-      />
-      <CreateAdminModal
-        form={form}
-        isCreateModalVisible={isCreateModalVisible}
-        setIsCreateModalVisible={setIsCreateModalVisible}
-        handleCreatePackage={handleCreatePackage}
-        //isCreateLoading={isCreateLoading}
       />
     </div>
   );

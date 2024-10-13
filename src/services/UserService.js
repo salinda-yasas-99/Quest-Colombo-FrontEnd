@@ -1,4 +1,4 @@
-import { privateAxios } from "./axiosInstance";
+import { privateAxios, publicAxios } from "./axiosInstance";
 
 export const getAllUsers = async (role) => {
   try {
@@ -12,9 +12,15 @@ export const getAllUsers = async (role) => {
 
 export const createAdmin = async (data) => {
   try {
-    const response = await privateAxios.post("/api/register", data);
+    const newAdmin = {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      role: "admin",
+    };
+    const response = await publicAxios.post("/api/register", newAdmin);
     console.log("responses: service::", response);
-    return response.data;
+    return response.data.message;
   } catch (error) {
     throw error.response ? error.response : error;
   }

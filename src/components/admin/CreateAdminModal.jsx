@@ -6,9 +6,21 @@ const CreateAdminModal = ({
   form,
   isCreateModalVisible,
   setIsCreateModalVisible,
-  handleCreatePackage,
+  handleAdminRegister,
   //isCreateLoading,
 }) => {
+  const validatePassword = (_, value) => {
+    if (value && form.getFieldValue("password") !== value) {
+      return Promise.reject(new Error("Passwords do not match!"));
+    }
+    return Promise.resolve();
+  };
+
+  const onFinish = (values) => {
+    console.log("Form Data:", values); // Console log form data
+    handleAdminRegister(values); // Call the package creation function with form values
+  };
+
   return (
     <Modal
       title="Register New Admin"
@@ -23,7 +35,7 @@ const CreateAdminModal = ({
         name="create-admin"
         form={form}
         layout="vertical"
-        onFinish={handleCreatePackage}
+        onFinish={onFinish}
         initialValues={{
           package_name: "",
           details: [" "],
@@ -51,15 +63,19 @@ const CreateAdminModal = ({
           name="password"
           rules={[{ required: true, message: "Please enter the password" }]}
         >
-          <Input />
+          <Input.Password />
         </Form.Item>
 
         <Form.Item
           label="Confirm Password"
           name="confirmPassword"
-          rules={[{ required: true, message: "Please enter confirm password" }]}
+          dependencies={["password"]}
+          rules={[
+            { required: true, message: "Please confirm your password" },
+            { validator: validatePassword },
+          ]}
         >
-          <Input />
+          <Input.Password />
         </Form.Item>
 
         <Form.Item>
