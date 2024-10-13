@@ -9,7 +9,7 @@ import {
   Spin,
   Typography,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createWorkspace,
   deleteWorkspaceById,
@@ -189,6 +189,7 @@ const AdminWorkspaces = () => {
                   }}
                   actions={[
                     <Popconfirm
+                      key={workspace.id}
                       title="Delete the Workspace Type"
                       description="Are you sure to delete this type?"
                       onConfirm={() => handleDelete(workspace.id)}
