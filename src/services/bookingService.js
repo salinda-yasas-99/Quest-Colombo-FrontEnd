@@ -1,12 +1,10 @@
 import { privateAxios } from "./axiosInstance";
 
-export const getAllBookingById = async (userId) => {
+export const getAllBoookingByUserId = async (userId) => {
   try {
-    const response = await privateAxios.get(
-      `/api/feedbacks/bookings/user/${userId}`
-    );
-    console.log("responses: service::", response);
-    return response.data;
+    const response = await privateAxios.get(`/api/bookings/user/${userId}`);
+    console.log("getAllBookingByUser::", response);
+    return response.data.data;
   } catch (error) {
     throw error.response ? error.response : error;
   }

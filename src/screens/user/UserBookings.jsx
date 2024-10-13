@@ -1,6 +1,8 @@
-import { Button, Table, Tag, Typography } from "antd";
+import { Button, notification, Table, Tag, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAllBoookingByUserId } from "../../services/bookingService";
+import { useSelector } from "react-redux";
 
 const { Text, Title } = Typography;
 
@@ -38,14 +40,42 @@ const mockBookingData = [
 ];
 
 const UserBookings = () => {
+  const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
+  const user = useSelector((state) => state.user.user);
 
-  // Fetch bookings data (mocked for now, replace with actual API call)
+  const openNotificationWithIcon = (type, message, description) => {
+    api[type]({
+      message: message,
+      description: description,
+      placement: "bottomRight",
+    });
+  };
+
+  const fetchAllBookingsByUserId = async (userId) => {
+    setLoading(true);
+    try {
+      const response = await getAllBoookingByUserId(userId);
+      setBookings(response);
+    } catch (error) {
+      openNotificationWithIcon(
+        "error",
+        "Error",
+        error?.data?.message || "An error occurred"
+      );
+      console.error("Erro ocurred while getting booking list: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setBookings(mockBookingData);
-    // Replace with real API call
-  }, []);
+    if (user) {
+      fetchAllBookingsByUserId(user.id);
+    }
+  }, [user]);
 
   const columns = [
     {
@@ -91,7 +121,14 @@ const UserBookings = () => {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Button type="primary" onClick={() => navigate(`${record.id}`)}>
+        <Button
+          type="primary"
+          onClick={() =>
+            navigate(`${record.id}`, {
+              state: { record },
+            })
+          }
+        >
           View Details
         </Button>
       ),
@@ -99,8 +136,15 @@ const UserBookings = () => {
   ];
   return (
     <div style={{}}>
+      {contextHolder}
       <Title level={2}>Your Bookings</Title>
-      <Table columns={columns} dataSource={bookings} rowKey="id" style={{}} />
+      <Table
+        columns={columns}
+        dataSource={bookings}
+        rowKey="id"
+        style={{}}
+        loading={loading}
+      />
     </div>
   );
 };

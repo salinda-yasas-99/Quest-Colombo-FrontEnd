@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, notification } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Button, Form, Input, notification, Flex, Checkbox } from "antd";
+import { useNavigate, Link } from "react-router-dom";
 import { userLogin } from "../../services/authService";
 import { useDispatch } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
@@ -83,6 +83,15 @@ const UserLoginForm = () => {
             type="password"
             placeholder="Password"
           />
+        </Form.Item>
+
+        <Form.Item>
+          <Flex justify="space-between" align="center">
+            {/* <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item> */}
+            <Link to="/forget-password">Forgot password</Link>
+          </Flex>
         </Form.Item>
 
         <Form.Item>
