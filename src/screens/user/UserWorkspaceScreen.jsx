@@ -37,7 +37,7 @@ const UserWorkspaceScreen = () => {
   const [selectedBookingData, setSelectedBookingData] = useState(null);
 
   const KEY =
-    "pk_test_51PZDQYGtHEDchr7LN5VKrI4bTTedKBTYHe1KqSchbR8r8IteKIrjob2qLx71GnsjAQbp27jHd0vu0c2omHSxtE2C00MlvZAAUF";
+    "pk_test_51Q9YlcF8iH0Dbw29Nqjo2HndgfPnbys93GiTE5XIjNPiO1074hGHUQzX5Q86BJDtdaAg0uuSLZLjbUHQvP69Gv3R00R335nHq6";
 
   const onToken = (token) => {
     console.log("This is stripe token", token);

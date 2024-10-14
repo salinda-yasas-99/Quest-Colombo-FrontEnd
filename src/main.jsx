@@ -25,6 +25,7 @@ import AdminPackagesScreen from "./screens/admin/AdminPackagesScreen.jsx";
 import AdminUserManagementScreen from "./screens/admin/AdminUserManagementScreen.jsx";
 import AdminInquiry from "./screens/admin/AdminInquiry.jsx";
 import ForgetPasswordScreen from "./screens/ForgetPasswordScreen.jsx";
+import AdminSingleBookingScreen from "./screens/admin/AdminSingleBookingScreen.jsx";
 
 const router = createBrowserRouter([
   {
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: "inquiry",
         element: <AdminInquiry />,
+      },
+      {
+        path: "bookings/:bookingId",
+        element: <AdminSingleBookingScreen />,
       },
     ],
   },
