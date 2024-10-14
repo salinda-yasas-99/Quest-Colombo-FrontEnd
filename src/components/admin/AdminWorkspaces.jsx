@@ -128,10 +128,6 @@ const AdminWorkspaces = () => {
     fetchAllworkspaces();
   }, []);
 
-  useEffect(() => {
-    console.log(workspaceTypes);
-  }, [workspaceTypes]);
-
   return (
     <div>
       {contextHolder}

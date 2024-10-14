@@ -3,7 +3,6 @@ import { privateAxios } from "./axiosInstance";
 export const getAllBoookingByUserId = async (userId) => {
   try {
     const response = await privateAxios.get(`/api/bookings/user/${userId}`);
-    console.log("getAllBookingByUser::", response);
     return response.data;
   } catch (error) {
     throw error.response ? error.response : error;
@@ -16,7 +15,15 @@ export const createBooking = async (data, userId) => {
       `/api/bookings?userId=${userId}`,
       data
     );
-    console.log("responses: service::", response);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response : error;
+  }
+};
+
+export const getAllBoookings = async () => {
+  try {
+    const response = await privateAxios.get(`/api/bookings/all`);
     return response.data;
   } catch (error) {
     throw error.response ? error.response : error;

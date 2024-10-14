@@ -6,39 +6,6 @@ import { useSelector } from "react-redux";
 
 const { Text, Title } = Typography;
 
-// const mockBookingData = [
-//   {
-//     id: 2,
-//     totalCharges: "100.00",
-//     bookedDate: "2024-10-13",
-//     bookedTime: "10:00:00",
-//     paymentMethod: "Online",
-//     paymentStatus: "Paid",
-//     bookedSlot: "slot_3",
-//     startTime: "10:00:00",
-//     endTime: "12:00:00",
-//     user_id: 1,
-//     workspace_id: 1,
-//     package_id: null,
-//     user: {
-//       id: 1,
-//       username: "testAdmin",
-//       email: "testAdmin@example.com",
-//       role: "admin",
-//     },
-//     workspace: {
-//       id: 1,
-//       name: "wok_1",
-//       description: "this is dummy desc",
-//       location: "first floor",
-//       fee: "3000.00",
-//       imageUrl: "img-src",
-//       workspace_type_id: 1,
-//     },
-//     package: null,
-//   },
-// ];
-
 const UserBookings = () => {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
