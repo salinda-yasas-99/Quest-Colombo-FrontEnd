@@ -91,7 +91,6 @@ const UserWorkspaceScreen = () => {
       endTime: bookingEnd,
       user_id: loggedUser.id,
       workspace_id: workspace.id,
-      //stripeToken: stripeToken.id,
       package_id: selectedPackage ? selectedPackage : null,
     };
 
@@ -100,38 +99,6 @@ const UserWorkspaceScreen = () => {
     //console.log("This token: ", bookingData.stripeToken);
     setSelectedBookingData(bookingData);
   };
-
-  // useEffect(() => {
-  //   if (stripeToken && selectedBookingData) {
-  //     console.log("Success booking", selectedBookingData);
-  //     createBooking(selectedBookingData, loggedUser.id)
-  //       .then((response) => {
-  //         // Handle success, such as showing notification or redirecting user
-  //         console.log("Booking successfully created", response);
-  //         alert(response);
-  //         openNotificationWithIcon(
-  //           "success",
-  //           "Booking Successful",
-  //           "Your booking has been confirmed."
-  //         );
-  //       })
-  //       .catch((error) => {
-  //         openNotificationWithIcon(
-  //           "error",
-  //           "Booking Failed",
-  //           error?.data?.message || "An error occurred while booking"
-  //         );
-  //         console.error("Error occurred while creating booking: ", error);
-  //         alert(error);
-  //       });
-  //   }
-  // }, [stripeToken, selectedBookingData]);
-
-  // useEffect(() => {
-  //   if (stripeToken) {
-  //     onFinish();
-  //   }
-  // }, [stripeToken]);
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -143,10 +110,18 @@ const UserWorkspaceScreen = () => {
 
         const response = await createBooking(bookingObj, loggedUser.id);
         console.log("order placed", response);
-        alert(response.data);
+        openNotificationWithIcon(
+          "success",
+          "Booking Successful",
+          "Your booking has been placed successfully!"
+        );
       } catch (err) {
         console.log(err);
-        alert(err);
+        openNotificationWithIcon(
+          "error",
+          "Booking Failed",
+          err?.response?.data?.message || "An error occurred during booking."
+        );
       }
     };
     if (stripeToken) {
