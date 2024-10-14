@@ -1,23 +1,41 @@
+import React, { useEffect, useState } from "react";
 import { LeftOutlined } from "@ant-design/icons";
 import { Button, Col, Empty, Form, Input, Row, Typography } from "antd";
-import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
-const UserSingleBookingScreen = () => {
+const AdminSingleBookingScreen = () => {
   const { bookingId } = useParams();
-  const [booking, setBooking] = React.useState(null);
+  const [booking, setBooking] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const record = location.state?.record;
 
-  React.useEffect(() => {
+  useEffect(() => {
     setBooking(record);
   }, [bookingId]);
 
-  if (!booking) return <Empty />;
+  if (!booking)
+    return (
+      <Empty
+        description={
+          <Text>
+            No booking data to display. Please select a booking from bookings
+            table
+          </Text>
+        }
+      >
+        <Button
+          type="primary"
+          onClick={() => navigate("/admin-dashboard/bookings")}
+          icon={<LeftOutlined />}
+        >
+          Back to Bookings
+        </Button>
+      </Empty>
+    );
 
   return (
     <div style={{ padding: "20px" }}>
@@ -99,7 +117,7 @@ const UserSingleBookingScreen = () => {
         <Col>
           <Button
             type="primary"
-            onClick={() => navigate("/user-dashboard/bookings")}
+            onClick={() => navigate("/admin-dashboard/bookings")}
             icon={<LeftOutlined />}
           >
             Back to Bookings
@@ -110,4 +128,4 @@ const UserSingleBookingScreen = () => {
   );
 };
 
-export default UserSingleBookingScreen;
+export default AdminSingleBookingScreen;
