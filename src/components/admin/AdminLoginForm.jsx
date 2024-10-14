@@ -1,8 +1,8 @@
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, notification, Typography } from "antd";
+import { Button, Flex, Form, Input, notification, Typography } from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userLogin } from "../../services/authService";
 import { loginStart, loginSuccess } from "../../redux/userSlice";
 import AdminLoginImg from "../../assets/innovation-pana.svg";
@@ -111,6 +111,14 @@ const AdminLoginForm = () => {
           <Button block type="primary" htmlType="submit" loading={loading}>
             Log in
           </Button>
+        </Form.Item>
+        <Form.Item>
+          <Flex justify="space-between" align="center">
+            {/* <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item> */}
+            <Link to="/forget-password">Forgot password</Link>
+          </Flex>
         </Form.Item>
       </Form>
     </div>
