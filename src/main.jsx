@@ -23,6 +23,8 @@ import UserSingleBookingScreen from "./screens/user/UserSingleBookingScreen.jsx"
 import AdminBookingListScreen from "./screens/admin/AdminBookingListScreen.jsx";
 import AdminPackagesScreen from "./screens/admin/AdminPackagesScreen.jsx";
 import AdminUserManagementScreen from "./screens/admin/AdminUserManagementScreen.jsx";
+import AdminInquiry from "./screens/admin/AdminInquiry.jsx";
+import ForgetPasswordScreen from "./screens/ForgetPasswordScreen.jsx";
 
 const router = createBrowserRouter([
   {
@@ -95,7 +97,16 @@ const router = createBrowserRouter([
         path: "user-management",
         element: <AdminUserManagementScreen />,
       },
+      {
+        path: "inquiry",
+        element: <AdminInquiry />,
+      },
     ],
+  },
+  {
+    path: "/forget-password",
+    element: <ForgetPasswordScreen />,
+    errorElement: <PageNotFound />,
   },
 ]);
 

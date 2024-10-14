@@ -1,47 +1,51 @@
+import { LeftOutlined } from "@ant-design/icons";
 import { Button, Col, Empty, Form, Input, Row, Typography } from "antd";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const { Title } = Typography;
 
-const mockBookingData = {
-  id: 2,
-  totalCharges: "100.00",
-  bookedDate: "2024-10-13",
-  bookedTime: "10:00:00",
-  paymentMethod: "Online",
-  paymentStatus: "Paid",
-  bookedSlot: "slot_3",
-  startTime: "10:00:00",
-  endTime: "12:00:00",
-  user_id: 1,
-  workspace_id: 1,
-  package_id: null,
-  user: {
-    id: 1,
-    username: "testAdmin",
-    email: "testAdmin@example.com",
-    role: "admin",
-  },
-  workspace: {
-    id: 1,
-    name: "wok_1",
-    description: "this is dummy desc",
-    location: "first floor",
-    fee: "3000.00",
-    imageUrl: "img-src",
-    workspace_type_id: 1,
-  },
-  package: null,
-};
+// const mockBookingData = {
+//   id: 2,
+//   totalCharges: "100.00",
+//   bookedDate: "2024-10-13",
+//   bookedTime: "10:00:00",
+//   paymentMethod: "Online",
+//   paymentStatus: "Paid",
+//   bookedSlot: "slot_3",
+//   startTime: "10:00:00",
+//   endTime: "12:00:00",
+//   user_id: 1,
+//   workspace_id: 1,
+//   package_id: null,
+//   user: {
+//     id: 1,
+//     username: "testAdmin",
+//     email: "testAdmin@example.com",
+//     role: "admin",
+//   },
+//   workspace: {
+//     id: 1,
+//     name: "wok_1",
+//     description: "this is dummy desc",
+//     location: "first floor",
+//     fee: "3000.00",
+//     imageUrl: "img-src",
+//     workspace_type_id: 1,
+//   },
+//   package: null,
+// };
 
 const UserSingleBookingScreen = () => {
   const { bookingId } = useParams();
   const [booking, setBooking] = React.useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const record = location.state?.record;
 
   React.useEffect(() => {
-    setBooking(mockBookingData);
+    setBooking(record);
   }, [bookingId]);
 
   if (!booking) return <Empty />;
@@ -72,7 +76,9 @@ const UserSingleBookingScreen = () => {
             <Form.Item label="Package">
               <Input
                 value={
-                  booking.package ? booking.package.name : "No Package Selected"
+                  record.package
+                    ? booking.package.package_name
+                    : "No Package Selected"
                 }
               />
             </Form.Item>
@@ -125,6 +131,7 @@ const UserSingleBookingScreen = () => {
           <Button
             type="primary"
             onClick={() => navigate("/user-dashboard/bookings")}
+            icon={<LeftOutlined />}
           >
             Back to Bookings
           </Button>

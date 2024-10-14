@@ -1,16 +1,17 @@
-import { useState } from "react";
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, notification } from "antd";
+import {
+  CodeSandboxOutlined,
+  LockOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
+import { Button, Form, Input, InputNumber, notification } from "antd";
+import React, { useState } from "react";
+import { resetPassword } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
-import { userRegister } from "../../services/authService";
-import { useDispatch } from "react-redux";
-import { loginFailure, loginSuccess } from "../../redux/userSlice";
 
-const UserRegisterForm = () => {
+const ResetPasswordForm = ({ setCurrent, formDissable }) => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const openNotificationWithIcon = (type, message, description) => {
     api[type]({
@@ -19,15 +20,15 @@ const UserRegisterForm = () => {
       placement: "bottomRight",
     });
   };
-
   const onFinish = async (values) => {
     setLoading(true);
+    setCurrent(1);
     try {
-      const response = await userRegister(values);
-
-      if (response.user) {
-        dispatch(loginSuccess(response.user));
-        navigate("/user-dashboard");
+      const response = await resetPassword(values);
+      setCurrent(1);
+      openNotificationWithIcon("success", "Success", response?.message);
+      if (response) {
+        navigate("/");
       }
     } catch (error) {
       openNotificationWithIcon(
@@ -35,37 +36,26 @@ const UserRegisterForm = () => {
         "Error",
         error?.data?.error || "An error occurred"
       );
-      dispatch(loginFailure(error?.data?.erro || "Login failed"));
-      console.error("Erro ocurred while login: ", error.data);
+      console.error("Erro ocurred while resetting password", error);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <>
       {contextHolder}
       <Form
-        name="register"
+        name="reset_password"
         initialValues={{
           remember: true,
         }}
         style={{
           maxWidth: "100%",
         }}
+        layout="vertical"
         onFinish={onFinish}
+        disabled={formDissable}
       >
-        <Form.Item
-          name="username"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Username!",
-            },
-          ]}
-        >
-          <Input prefix={<UserOutlined />} placeholder="Username" />
-        </Form.Item>
         <Form.Item
           name="email"
           rules={[
@@ -75,18 +65,21 @@ const UserRegisterForm = () => {
             },
             { type: "email", message: "Please enter a valid email" },
           ]}
+          label="Email"
         >
           <Input prefix={<MailOutlined />} placeholder="Email" />
         </Form.Item>
+
         <Form.Item
-          name="password"
+          name="new_password"
           rules={[
             {
               required: true,
-              message: "Please input your Password!",
+              message: "Please input your new Password!",
             },
           ]}
           hasFeedback
+          label="New Password"
         >
           <Input.Password
             prefix={<LockOutlined />}
@@ -97,16 +90,16 @@ const UserRegisterForm = () => {
 
         <Form.Item
           name="confirm"
-          dependencies={["password"]}
+          dependencies={["new_password"]}
           hasFeedback
           rules={[
             {
               required: true,
-              message: "Please confirm your password!",
+              message: "Please confirm your new password!",
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue("password") === value) {
+                if (!value || getFieldValue("new_password") === value) {
                   return Promise.resolve();
                 }
                 return Promise.reject(
@@ -115,6 +108,7 @@ const UserRegisterForm = () => {
               },
             }),
           ]}
+          label="Confirm New Password"
         >
           <Input.Password
             prefix={<LockOutlined />}
@@ -122,10 +116,29 @@ const UserRegisterForm = () => {
             placeholder="Confirm Password"
           />
         </Form.Item>
+        <Form.Item
+          name="otp"
+          rules={[
+            {
+              required: true,
+              message: "Please input your otp!",
+            },
+            { type: "number", message: "Please enter a valid otp number." },
+          ]}
+          label="OTP"
+        >
+          <InputNumber
+            min={0}
+            length={6}
+            style={{ width: "100%" }}
+            prefix={<CodeSandboxOutlined />}
+            placeholder="OTP"
+          />
+        </Form.Item>
 
         <Form.Item>
           <Button block type="primary" htmlType="submit" loading={loading}>
-            Register
+            Reset Password
           </Button>
         </Form.Item>
       </Form>
@@ -133,4 +146,4 @@ const UserRegisterForm = () => {
   );
 };
 
-export default UserRegisterForm;
+export default ResetPasswordForm;

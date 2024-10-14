@@ -1,4 +1,3 @@
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -12,20 +11,24 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import {
-  createWorkspaceType,
-  deleteWorkspaceTypeById,
-  getAllWorkspaceTypes,
-} from "../../services/workspaceTypesService";
-import CreateWorkspaceTypeModal from "./CreateWorkspaceTypeModal";
+  createWorkspace,
+  deleteWorkspaceById,
+  getAllWorkspaces,
+} from "../../services/workspacesService";
+import CreateWorkspaceModal from "./CreateWorkspaceModal";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { getAllWorkspaceTypes } from "../../services/workspaceTypesService";
 
 const { Title, Text } = Typography;
 
-const AdminWorkspaceTypes = () => {
-  const [workspaceTypes, setWorkspaceTypes] = useState([]);
+const AdminWorkspaces = () => {
+  const [workspaces, setWorkspaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isCreateLoading, setIsCreateLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [workspaceTypes, setWorkspaceTypes] = useState([]);
 
   const openNotificationWithIcon = (type, message, description) => {
     api[type]({
@@ -39,8 +42,69 @@ const AdminWorkspaceTypes = () => {
     setIsCreateModalVisible(true);
   };
 
-  const fetchAllworkspaceTypes = async () => {
+  const fetchAllworkspaces = async () => {
     setLoading(true);
+    try {
+      const response = await getAllWorkspaces();
+      setWorkspaces(response);
+    } catch (error) {
+      openNotificationWithIcon(
+        "error",
+        "Error",
+        error?.data?.message || "An error occurred"
+      );
+      console.error("Erro ocurred while getting workspaces: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateWorkspace = async (values) => {
+    setIsCreateLoading(true);
+    try {
+      const response = await createWorkspace(values); // Send API request to create the package
+      openNotificationWithIcon(
+        "success",
+        "Success",
+        "Workspace created successfully"
+      );
+      console.log(response);
+      fetchAllworkspaces();
+      // setWorkspaces((prevTypes) => [...prevTypes, response]);
+      setIsCreateModalVisible(false);
+    } catch (error) {
+      openNotificationWithIcon(
+        "error",
+        "Error",
+        error?.data?.message || "Failed to create Workspace"
+      );
+      console.error("Error occurred while creating workspace: ", error);
+    } finally {
+      setImageUrl("");
+      setIsCreateLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteWorkspaceById(id);
+      setWorkspaces(workspaces.filter((type) => type.id !== id));
+      openNotificationWithIcon(
+        "success",
+        "Success",
+        "Workspace deleted successfully"
+      );
+    } catch (error) {
+      openNotificationWithIcon(
+        "error",
+        "Error",
+        error?.data?.message || "An error occurred while deleting the workspace"
+      );
+      console.error("Error occurred while deleting workspace: ", error);
+    }
+  };
+
+  const fetchAllworkspaceTypes = async () => {
     try {
       const response = await getAllWorkspaceTypes();
       setWorkspaceTypes(response);
@@ -51,63 +115,28 @@ const AdminWorkspaceTypes = () => {
         error?.data?.message || "An error occurred"
       );
       console.error("Erro ocurred while getting packages: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateWorkspaceType = async (values) => {
-    setIsCreateLoading(true);
-    try {
-      const response = await createWorkspaceType(values); // Send API request to create the package
-      openNotificationWithIcon(
-        "success",
-        "Success",
-        "Workspace Type created successfully"
-      );
-      setWorkspaceTypes((prevTypes) => [...prevTypes, response]);
-      setIsCreateModalVisible(false);
-    } catch (error) {
-      openNotificationWithIcon(
-        "error",
-        "Error",
-        error?.data?.message || "Failed to create Workspace Type"
-      );
-      console.error("Error occurred while creating workspace type: ", error);
-    } finally {
-      setIsCreateLoading(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteWorkspaceTypeById(id);
-      setWorkspaceTypes(workspaceTypes.filter((type) => type.id !== id));
-      openNotificationWithIcon(
-        "success",
-        "Success",
-        "Workspace Type deleted successfully"
-      );
-    } catch (error) {
-      openNotificationWithIcon(
-        "error",
-        "Error",
-        error?.data?.message ||
-          "An error occurred while deleting the workspace type"
-      );
-      console.error("Error occurred while deleting workspace type: ", error);
     }
   };
 
   useEffect(() => {
-    fetchAllworkspaceTypes();
+    if (isCreateModalVisible) {
+      fetchAllworkspaceTypes();
+    }
+  }, [isCreateModalVisible]);
+
+  useEffect(() => {
+    fetchAllworkspaces();
   }, []);
+
+  useEffect(() => {
+    console.log(workspaceTypes);
+  }, [workspaceTypes]);
 
   return (
     <div>
       {contextHolder}
       <Title level={2} style={{ textAlign: "left", marginBottom: "30px" }}>
-        Workspace Types
+        Workspaces
       </Title>
       <div
         style={{
@@ -121,7 +150,7 @@ const AdminWorkspaceTypes = () => {
           icon={<PlusOutlined />}
           onClick={showCreateModal}
         >
-          Workspace Type
+          Workspace
         </Button>
       </div>
       {loading ? (
@@ -136,10 +165,10 @@ const AdminWorkspaceTypes = () => {
         />
       ) : (
         <Row gutter={[16, 16]} justify="center">
-          {workspaceTypes?.length > 0 ? (
-            workspaceTypes?.map((workspaceType) => (
+          {workspaces?.length > 0 ? (
+            workspaces?.map((workspace) => (
               <Col
-                key={workspaceType.id}
+                key={workspace.id}
                 xs={24}
                 sm={12}
                 md={8}
@@ -147,7 +176,13 @@ const AdminWorkspaceTypes = () => {
               >
                 <Card
                   hoverable
-                  className="workspace-card"
+                  cover={
+                    <img
+                      alt={workspace.name}
+                      src={workspace.imageUrl}
+                      style={{ height: "300px", objectFit: "cover" }}
+                    />
+                  }
                   style={{
                     textAlign: "center",
                     borderRadius: "10px",
@@ -155,10 +190,10 @@ const AdminWorkspaceTypes = () => {
                   }}
                   actions={[
                     <Popconfirm
-                      key={workspaceType.id}
+                      key={workspace.id}
                       title="Delete the Workspace Type"
                       description="Are you sure to delete this type?"
-                      onConfirm={() => handleDelete(workspaceType.id)}
+                      onConfirm={() => handleDelete(workspace.id)}
                       okText="Yes"
                       cancelText="No"
                     >
@@ -166,12 +201,22 @@ const AdminWorkspaceTypes = () => {
                     </Popconfirm>,
                   ]}
                 >
-                  <Title level={4}>{workspaceType?.type_name}</Title>
+                  <Title level={4}>{workspace.name}</Title>
+                  <Text>{workspace.description}</Text>
+                  <br />
+                  <Text>Location: {workspace.location}</Text>
+                  <br />
+                  <Text>
+                    Workspace Type: {workspace.workspace_type.type_name}
+                  </Text>
+                  <br />
+                  <Text>Fee: {workspace.fee} LKR</Text>
+                  <br />
                 </Card>
               </Col>
             ))
           ) : (
-            <Empty description={<Text>No Workspace types Available</Text>}>
+            <Empty description={<Text>No Workspace Available</Text>}>
               <Button type="primary" onClick={showCreateModal}>
                 Create Now
               </Button>
@@ -179,14 +224,17 @@ const AdminWorkspaceTypes = () => {
           )}
         </Row>
       )}
-      <CreateWorkspaceTypeModal
+      <CreateWorkspaceModal
         isCreateModalVisible={isCreateModalVisible}
         setIsCreateModalVisible={setIsCreateModalVisible}
-        handleCreateWorkspaceType={handleCreateWorkspaceType}
+        handleCreateWorkspace={handleCreateWorkspace}
         isCreateLoading={isCreateLoading}
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+        workspaceTypes={workspaceTypes}
       />
     </div>
   );
 };
 
-export default AdminWorkspaceTypes;
+export default AdminWorkspaces;
