@@ -1,4 +1,8 @@
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Col,
@@ -10,6 +14,7 @@ import {
   Typography,
   Form,
   notification,
+  Tag,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import {
@@ -17,25 +22,23 @@ import {
   deleteUserById,
   getAllUsers,
 } from "../../services/UserService";
-import { createPackage } from "../../services/packagesService";
 import CreateAdminModal from "../../components/admin/CreateAdminModal";
 
-const { Option } = Select; // Import Option from Select
+const { Option } = Select;
 
 const AdminUserManagementScreen = () => {
   const { Title } = Typography;
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRole, setSelectedRole] = useState("all"); // State to hold selected role
+  const [selectedRole, setSelectedRole] = useState("all");
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
-  //const [packages, setPackages] = useState([]);
 
   const fetchUsers = async (role = "all") => {
-    setLoading(true); // Set loading to true before fetching
+    setLoading(true);
     try {
-      const response = await getAllUsers(role); // Pass role as a parameter
+      const response = await getAllUsers(role);
       if (response !== undefined) {
         const userData = response.map((item) => ({
           ...item,
@@ -59,7 +62,6 @@ const AdminUserManagementScreen = () => {
   };
 
   const handleAdminRegister = async (values) => {
-    //setIsCreateLoading(true);
     try {
       console.log("This user page admin", values);
       const response = await createAdmin(values);
@@ -68,7 +70,6 @@ const AdminUserManagementScreen = () => {
         "Success",
         "Admin registered successfully"
       );
-      //setPackages((prevPackages) => [...prevPackages, response]);
       fetchUsers();
       setIsCreateModalVisible(false);
     } catch (error) {
@@ -79,7 +80,6 @@ const AdminUserManagementScreen = () => {
       );
       console.error("Error occurred while creating package: ", error);
     } finally {
-      //setIsCreateLoading(false);
       form.resetFields();
     }
   };
@@ -88,8 +88,7 @@ const AdminUserManagementScreen = () => {
     try {
       await deleteUserById(id);
       message.success("User deleted successfully");
-      // Refresh the table data after deletion
-      fetchUsers(selectedRole); // Fetch users again with the selected role
+      fetchUsers(selectedRole);
     } catch (error) {
       console.error("Error deleting user:", error);
       message.error("There was an error deleting the user.");
@@ -102,7 +101,7 @@ const AdminUserManagementScreen = () => {
 
   const handleRoleChange = (value) => {
     setSelectedRole(value);
-    fetchUsers(value); // Fetch users based on the selected role
+    fetchUsers(value);
   };
 
   const cancel = () => {
@@ -126,28 +125,51 @@ const AdminUserManagementScreen = () => {
       key: "role",
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (_, record) =>
+        record.status === "active" ? (
+          <Tag icon={<CheckCircleOutlined />} color="success">
+            Activated
+          </Tag>
+        ) : record.status === "deactivated" ? (
+          <Tag icon={<CloseCircleOutlined />} color="error">
+            Deactivated
+          </Tag>
+        ) : (
+          <Tag color="default">NULL</Tag>
+        ),
+    },
+    {
       title: "Action",
       key: "action",
       render: (text, record) => (
         <Popconfirm
-          title="Are you sure to delete this user?"
-          onConfirm={() => handleDelete(record.id)} // Use the handleDelete function
+          title="Are you sure to deactivate this user?"
+          onConfirm={() => handleDelete(record.id)}
           onCancel={cancel}
           okText="Yes"
           cancelText="No"
         >
-          <Button danger>Delete</Button>
+          <Button
+            disabled={record.status === "deactivated" ? true : false}
+            danger
+          >
+            Deactivate
+          </Button>
         </Popconfirm>
       ),
     },
   ];
 
   useEffect(() => {
-    fetchUsers(); // Fetch all users on initial render
+    fetchUsers();
   }, []);
 
   return (
     <div>
+      {contextHolder}
       <CreateAdminModal
         form={form}
         isCreateModalVisible={isCreateModalVisible}
@@ -167,6 +189,7 @@ const AdminUserManagementScreen = () => {
             defaultValue="all"
             style={{ width: 120, marginRight: "10px" }} // Style the select box
             onChange={handleRoleChange} // Handle role change
+            title="Filter By Role"
           >
             <Option value="all">All Users</Option>
             <Option value="admin">Admin</Option>
