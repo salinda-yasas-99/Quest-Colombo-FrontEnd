@@ -6,10 +6,12 @@ import {
   DatePicker,
   Empty,
   Form,
+  List,
   notification,
   Row,
   Select,
   Spin,
+  Tag,
   Typography,
 } from "antd";
 import React, { useEffect, useState } from "react";
@@ -194,8 +196,8 @@ const UserWorkspaceScreen = () => {
       </div>
       <div style={{ marginTop: "20px" }}>
         <Title level={4}>Available Slots</Title>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12}>
+        <Row gutter={[32, 16]}>
+          <Col xs={24} sm={12} md={8} lg={8}>
             <Button
               disabled={workspace.slot_1 === "booked"}
               icon={
@@ -211,7 +213,7 @@ const UserWorkspaceScreen = () => {
               Slot 1: {workspace.slot_1 === "booked" ? "Booked" : "Available"}
             </Button>
           </Col>
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={12} md={8} lg={8}>
             <Button
               disabled={workspace.slot_2 === "booked"}
               icon={
@@ -227,7 +229,7 @@ const UserWorkspaceScreen = () => {
               Slot 2: {workspace.slot_2 === "booked" ? "Booked" : "Available"}
             </Button>
           </Col>
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={12} md={8} lg={8}>
             <Button
               disabled={workspace.slot_3 === "booked"}
               icon={
@@ -260,14 +262,14 @@ const UserWorkspaceScreen = () => {
             }}
           />
         ) : (
-          <Row gutter={[16, 16]}>
+          <Row gutter={[16, 16]} justify="center">
             {packages.length > 0 ? (
               packages.map((pkg) => (
                 <Col key={pkg.id} xs={24} sm={12} md={8}>
                   <Card
                     hoverable
                     style={{
-                      textAlign: "center",
+                      // textAlign: "center",
                       borderRadius: "10px",
                       borderColor:
                         selectedPackage === pkg.id ? "#00b96b" : "#f0f0f0",
@@ -276,12 +278,17 @@ const UserWorkspaceScreen = () => {
                     onClick={() => setSelectedPackage(pkg.id)}
                   >
                     <Title level={5}>{pkg.package_name}</Title>
-                    <Text>{pkg.details}</Text>
+                    <List
+                      size="small"
+                      dataSource={pkg.details}
+                      renderItem={(item) => <List.Item>• {item}</List.Item>}
+                    />
                     <div
                       style={{
                         marginTop: "10px",
                         fontWeight: "bold",
                         color: "#ff4d4f",
+                        textAlign: "center",
                       }}
                     >
                       <Text>{pkg.price} LKR</Text>
@@ -306,91 +313,104 @@ const UserWorkspaceScreen = () => {
         }}
       >
         <Title level={4}>Book Now</Title>
-        <Form
-          layout="vertical"
-          name="create_booking"
-          initialValues={{
-            remember: true,
-          }}
-          style={{
-            maxWidth: "100%",
-          }}
-          onFinish={onFinish}
-        >
-          <Form.Item
-            label="Selected Date"
-            name="bookedDate"
-            rules={[
-              { required: true, message: "Please select a booking date!" },
-            ]}
-            initialValue={dayjs(formattedDate, "YYYY-MM-DD")}
-          >
-            <DatePicker disabled style={{ width: "100%" }} />
-          </Form.Item>
-
-          <Form.Item
-            label="Select Slot"
-            rules={[
-              {
-                required: true,
-                message: "Please select a slot!",
-              },
-            ]}
-            name="bookedSlot"
-          >
-            <Select
-              placeholder="Select a slot"
-              value={selectedSlot}
-              onChange={setSelectedSlot}
+        <Row gutter={[32, 16]} justify="right">
+          <Col xs={24} sm={24} md={12} lg={12}>
+            <Form
+              layout="vertical"
+              name="create_booking"
+              initialValues={{
+                remember: true,
+              }}
+              style={{
+                maxWidth: "100%",
+              }}
+              onFinish={onFinish}
             >
-              <Option value="slot_1" disabled={workspace.slot_1 === "booked"}>
-                Slot 1:{" "}
-                {workspace.slot_1 === "available" ? "Available" : "Booked"}
-              </Option>
-              <Option value="slot_2" disabled={workspace.slot_2 === "booked"}>
-                Slot 2:{" "}
-                {workspace.slot_2 === "available" ? "Available" : "Booked"}
-              </Option>
-              <Option value="slot_3" disabled={workspace.slot_3 === "booked"}>
-                Slot 3:{" "}
-                {workspace.slot_3 === "available" ? "Available" : "Booked"}
-              </Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item label="Select Package" name="package_id">
-            <Select
-              placeholder="Select a package"
-              value={selectedPackage}
-              onChange={setSelectedPackage}
-            >
-              {packages.map((pkg) => (
-                <Select.Option key={pkg.id} value={pkg.id}>
-                  {pkg.package_name} - {pkg.price} LKR
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item>
-            <StripeCheckout
-              name="Shoe Heaven"
-              shippingAddress
-              description={`Your total is Rs.${getTotalAmount()}`}
-              amount={getTotalAmount() * 100} // Amount in cents
-              token={onToken}
-              stripeKey={KEY}
-              currency="LKR"
-            >
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: "100%" }}
+              <Form.Item
+                label="Selected Date"
+                name="bookedDate"
+                rules={[
+                  { required: true, message: "Please select a booking date!" },
+                ]}
+                initialValue={dayjs(formattedDate, "YYYY-MM-DD")}
               >
-                Book Now
-              </Button>
-            </StripeCheckout>
-          </Form.Item>
-        </Form>
+                <DatePicker disabled style={{ width: "100%" }} />
+              </Form.Item>
+
+              <Form.Item
+                label="Select Slot"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a slot!",
+                  },
+                ]}
+                name="bookedSlot"
+              >
+                <Select
+                  placeholder="Select a slot"
+                  value={selectedSlot}
+                  onChange={setSelectedSlot}
+                >
+                  <Option
+                    value="slot_1"
+                    disabled={workspace.slot_1 === "booked"}
+                  >
+                    Slot 1:{" "}
+                    {workspace.slot_1 === "available" ? "Available" : "Booked"}
+                  </Option>
+                  <Option
+                    value="slot_2"
+                    disabled={workspace.slot_2 === "booked"}
+                  >
+                    Slot 2:{" "}
+                    {workspace.slot_2 === "available" ? "Available" : "Booked"}
+                  </Option>
+                  <Option
+                    value="slot_3"
+                    disabled={workspace.slot_3 === "booked"}
+                  >
+                    Slot 3:{" "}
+                    {workspace.slot_3 === "available" ? "Available" : "Booked"}
+                  </Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item label="Select Package" name="package_id">
+                <Select
+                  placeholder="Select a package"
+                  value={selectedPackage}
+                  onChange={setSelectedPackage}
+                >
+                  {packages.map((pkg) => (
+                    <Select.Option key={pkg.id} value={pkg.id}>
+                      {pkg.package_name} - {pkg.price} LKR
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <StripeCheckout
+                  name="Shoe Heaven"
+                  shippingAddress
+                  description={`Your total is Rs.${getTotalAmount()}`}
+                  amount={getTotalAmount() * 100} // Amount in cents
+                  token={onToken}
+                  stripeKey={KEY}
+                  currency="LKR"
+                >
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ width: "100%" }}
+                  >
+                    Book Now
+                  </Button>
+                </StripeCheckout>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
       </div>
     </div>
   );

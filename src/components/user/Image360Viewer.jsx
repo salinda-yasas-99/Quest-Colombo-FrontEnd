@@ -35,7 +35,8 @@ const Image360Viewer = ({ imageUrl }) => {
         justifyContent: "center",
         alignItems: "center",
         height: "100%",
-        width: "100%",
+        width: "60%",
+        margin: "auto",
       }}
     >
       <div
