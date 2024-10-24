@@ -1,4 +1,13 @@
-import { Col, Row, Typography, Button, Table, Popconfirm, message } from "antd";
+import {
+  Col,
+  Row,
+  Typography,
+  Button,
+  Table,
+  Popconfirm,
+  message,
+  Tag,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import "./css/AdminInquiry.css";
 import {
@@ -69,17 +78,20 @@ const AdminInquiry = () => {
     {
       title: "Action",
       key: "action",
-      render: (text, record) => (
-        <Popconfirm
-          title="Are you sure to delete this inquiry?"
-          onConfirm={() => handleDelete(record.id)}
-          onCancel={cancel}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button danger>Delete</Button>
-        </Popconfirm>
-      ),
+      render: (text, record) =>
+        record.status === "read" ? (
+          <Tag color="orange">Already Read</Tag>
+        ) : (
+          <Popconfirm
+            title="Are you sure you want to mark this message as read?"
+            onConfirm={() => handleDelete(record.id)}
+            onCancel={cancel}
+            okText="Yes, mark as read"
+            cancelText="No, keep unread"
+          >
+            <Button danger>Mark as Read</Button>
+          </Popconfirm>
+        ),
     },
   ];
 

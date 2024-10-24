@@ -1,10 +1,19 @@
-import React from "react";
-import { Avatar, Dropdown, Layout, Menu, Modal, Space, theme } from "antd";
+import React, { useEffect } from "react";
+import {
+  Avatar,
+  Badge,
+  Dropdown,
+  Layout,
+  Menu,
+  Modal,
+  Space,
+  theme,
+} from "antd";
 import Logo from "../../assets/logo.png";
 import { ExclamationCircleOutlined, UserOutlined } from "@ant-design/icons";
 import "../../styles/user-dashboard-layout.styles.css";
 import UserProtectedRoute from "../../components/user/UserProtectedRoute";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
@@ -17,6 +26,7 @@ const UserDashboardLayout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [modal, contextHolder] = Modal.useModal();
+  const user = useSelector((state) => state.user.user);
 
   const goToProfile = () => {
     navigate("/user-dashboard/user-profile");
