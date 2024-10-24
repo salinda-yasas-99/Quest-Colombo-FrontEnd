@@ -14,10 +14,6 @@ function App() {
     setCurrentSection(sectionId);
   };
 
-  useEffect(() => {
-    console.log(currentSection);
-  });
-
   return (
     <Layout>
       <Header className="home-header">

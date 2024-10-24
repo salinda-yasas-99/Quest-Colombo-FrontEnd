@@ -17,12 +17,9 @@ const LoginRegisterModal = ({ open = false, handleCancel }) => {
     },
   ];
 
-  const onChange = (key) => {
-    console.log(key);
-  };
   return (
     <Modal open={open} onCancel={handleCancel} footer={null}>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Tabs defaultActiveKey="1" items={items} />
     </Modal>
   );
 };

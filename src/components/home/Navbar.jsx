@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Button, Menu } from "antd";
+import { Button, Menu, Modal } from "antd";
 import Logo from "../../assets/logo.png";
-import { UserOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleOutlined,
+  LoginOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import LoginRegisterModal from "./LoginRegisterModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getToken, getUser } from "../../utils/authUtils";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/userSlice";
 
 const Navbar = ({ currentSection }) => {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState("home-section");
   const [open, setOpen] = useState(false);
+
+  const user = useSelector((state) => state.user.user);
+  const token = getToken();
+  const localUser = getUser();
+
+  const [modal, contextHolder] = Modal.useModal();
+  const dispatch = useDispatch();
 
   const menuItems = [
     {
@@ -39,12 +55,30 @@ const Navbar = ({ currentSection }) => {
     setCurrent(e.key);
   };
 
+  const goToDashboard = () => {
+    navigate("/user-dashboard");
+  };
+
+  const confirmLogout = () => {
+    modal.confirm({
+      title: "Confirm",
+      icon: <ExclamationCircleOutlined />,
+      content: "Do you want to logout from the session?",
+      okText: "Logout",
+      cancelText: "cancel",
+      onOk: () => {
+        dispatch(logout());
+      },
+    });
+  };
+
   useEffect(() => {
     setCurrent(currentSection);
   }, [currentSection]);
 
   return (
     <>
+      {contextHolder}
       <div className="navbar-logo">
         <img src={Logo} />
       </div>
@@ -56,14 +90,30 @@ const Navbar = ({ currentSection }) => {
         onClick={menuOnClick}
       />
       <div className="navbar-btn-container">
-        <Button
-          type="primary"
-          shape="round"
-          icon={<UserOutlined />}
-          onClick={showModal}
-        >
-          Login / Register
-        </Button>
+        {!user || user?.role !== "user" || (!token && !localUser) ? (
+          <Button
+            type="primary"
+            shape="round"
+            icon={<UserOutlined />}
+            onClick={showModal}
+          >
+            Login / Register
+          </Button>
+        ) : (
+          <>
+            <Button type="link" onClick={confirmLogout}>
+              Logout
+            </Button>
+            <Button
+              type="primary"
+              shape="round"
+              icon={<LoginOutlined />}
+              onClick={goToDashboard}
+            >
+              Dashboard
+            </Button>
+          </>
+        )}
       </div>
       <LoginRegisterModal open={open} handleCancel={handleCancel} />
     </>
