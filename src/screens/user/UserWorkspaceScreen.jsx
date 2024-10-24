@@ -1,5 +1,6 @@
 import { CheckOutlined, LockOutlined } from "@ant-design/icons";
 import {
+  Badge,
   Button,
   Card,
   Col,
@@ -22,9 +23,31 @@ import { getAllPackages } from "../../services/packagesService";
 import { useSelector } from "react-redux";
 import StripeCheckout from "react-stripe-checkout";
 import { createBooking } from "../../services/bookingService";
+import { getUserById } from "../../services/UserService";
 
 const { Text, Title } = Typography;
 const { Option } = Select;
+
+const tiers = [
+  {
+    id: 1,
+    name: "platinum",
+    description: "No discount is available.",
+    discount: 0,
+  },
+  {
+    id: 2,
+    name: "silver",
+    description: "Discount 2% is available.",
+    discount: 2,
+  },
+  {
+    id: 3,
+    name: "gold",
+    description: "Discount 5% is available.",
+    discount: 5,
+  },
+];
 
 const UserWorkspaceScreen = () => {
   const location = useLocation();
@@ -37,6 +60,32 @@ const UserWorkspaceScreen = () => {
   const loggedUser = useSelector((state) => state.user.user);
   const [stripeToken, setStripeToken] = useState(null);
   const [selectedBookingData, setSelectedBookingData] = useState(null);
+  const [selectedTier, setSelectedTier] = useState(null);
+  const [admin, setAdmin] = useState({
+    username: "",
+    email: "",
+    role: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const fetchAdmin = async () => {
+    setLoading(true);
+    try {
+      const userString = localStorage.getItem("user");
+      const user = JSON.parse(userString);
+      const response = await getUserById(user.id);
+      setAdmin(response);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdmin();
+  }, []);
 
   const KEY =
     "pk_test_51Q9YlcF8iH0Dbw29Nqjo2HndgfPnbys93GiTE5XIjNPiO1074hGHUQzX5Q86BJDtdaAg0uuSLZLjbUHQvP69Gv3R00R335nHq6";
@@ -48,8 +97,16 @@ const UserWorkspaceScreen = () => {
 
   const getTotalAmount = () => {
     const result = packages.find((pkg) => pkg.id === selectedPackage);
-    const totalCharges =
+    let totalCharges =
       parseFloat(workspace.fee) + (result ? parseFloat(result.price) : 0);
+
+    if (selectedTier) {
+      if (selectedTier === "silver") {
+        totalCharges = totalCharges * 0.98;
+      } else if (selectedTier === "gold") {
+        totalCharges = totalCharges * 0.95;
+      }
+    }
     return totalCharges;
   };
 
@@ -74,8 +131,18 @@ const UserWorkspaceScreen = () => {
       bookingEnd = "19:00:00";
     }
 
-    const totalCharges =
+    let totalCharges =
       parseFloat(workspace.fee) + (result ? parseFloat(result.price) : 0);
+
+    if (selectedTier) {
+      if (selectedTier === "silver") {
+        totalCharges = totalCharges * 0.98;
+      } else if (selectedTier === "gold") {
+        totalCharges = totalCharges * 0.95;
+      }
+    }
+
+    // setTotalAmount(totalCharges);
 
     console.log("This is package", result);
     console.log("This is booking start", bookingStart);
@@ -94,6 +161,7 @@ const UserWorkspaceScreen = () => {
       user_id: loggedUser.id,
       workspace_id: workspace.id,
       package_id: selectedPackage ? selectedPackage : null,
+      tier: selectedTier ? selectedTier : null,
     };
 
     // Log the constructed object (for testing purposes)
@@ -303,6 +371,32 @@ const UserWorkspaceScreen = () => {
         )}
       </div>
 
+      {/* Teiers available */}
+      <div style={{ marginTop: "30px" }}>
+        <Title level={4}>Tiers Available</Title>
+        <Row gutter={[16, 16]} justify="center">
+          {tiers?.map((tier) => (
+            <Col key={tier.id} xs={24} sm={12} md={8}>
+              <Badge.Ribbon text={`Discount ${tier.discount}%`} color="purple">
+                <Card
+                  hoverable
+                  style={{
+                    borderRadius: "10px",
+                    borderColor:
+                      selectedTier === tier.name ? "#00b96b" : "#f0f0f0",
+                    backgroundColor: "white",
+                  }}
+                  onClick={() => setSelectedTier(tier.name)}
+                  title={tier.name}
+                >
+                  <Text>{tier.description}</Text>
+                </Card>
+              </Badge.Ribbon>
+            </Col>
+          ))}
+        </Row>
+      </div>
+
       {/* Book Now Form  */}
       <div
         style={{
@@ -389,12 +483,26 @@ const UserWorkspaceScreen = () => {
                   ))}
                 </Select>
               </Form.Item>
+              <Form.Item label="Select Tier" name="tier">
+                <Select
+                  placeholder="Select a Tier"
+                  value={selectedTier}
+                  onChange={setSelectedTier}
+                >
+                  <Option value="silver" disabled={admin.points <= 1000}>
+                    Silver
+                  </Option>
+                  <Option value="gold" disabled={admin.points <= 4000}>
+                    Gold
+                  </Option>
+                </Select>
+              </Form.Item>
               <Form.Item>
                 <StripeCheckout
                   name="Quest Colombo"
                   shippingAddress
                   description={`Your total is Rs.${getTotalAmount()}`}
-                  amount={getTotalAmount() * 100} // Amount in cents
+                  amount={getTotalAmount() * 100}
                   token={onToken}
                   stripeKey={KEY}
                   currency="LKR"
