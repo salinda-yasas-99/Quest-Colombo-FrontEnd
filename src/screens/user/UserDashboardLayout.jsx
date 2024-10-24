@@ -6,7 +6,7 @@ import "../../styles/user-dashboard-layout.styles.css";
 import UserProtectedRoute from "../../components/user/UserProtectedRoute";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/userSlice";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
 
@@ -82,11 +82,17 @@ const UserDashboardLayout = () => {
       {contextHolder}
       <Layout className="user-dashboard-layout">
         <Header className="user-dashbaord-layout-header">
-          <img
-            className="user-dashbaord-layout-logo-image"
-            src={Logo}
-            alt="logo-image"
-          />
+          <Link
+            to="/"
+            style={{ height: "100%", display: "flex", alignItems: "center" }}
+          >
+            <img
+              className="user-dashbaord-layout-logo-image"
+              src={Logo}
+              alt="logo-image"
+            />
+          </Link>
+
           <Menu
             className="user-dashbaord-layout-menu"
             theme="dark"
