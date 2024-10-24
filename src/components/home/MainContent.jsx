@@ -1,20 +1,74 @@
-import React from "react";
-import { Layout } from "antd";
+import React, { useEffect, useRef } from "react";
 import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeaturesSection";
 import AboutUsSection from "./AboutUsSection";
 import ContactUsSection from "./ContactUsSection";
 import WhatApp from "../../assets/logowtp.svg";
 
-const { Content } = Layout;
+const MainContent = ({ onSectionChange }) => {
+  const sectionRefs = useRef({
+    home: null,
+    features: null,
+    about: null,
+    contact: null,
+  });
 
-const MainContent = () => {
+  useEffect(() => {
+    const sections = [
+      { id: "home", ref: sectionRefs.current.home },
+      { id: "features", ref: sectionRefs.current.features },
+      { id: "about", ref: sectionRefs.current.about },
+      { id: "contact", ref: sectionRefs.current.contact },
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSection = entries.find((entry) => entry.isIntersecting);
+        if (visibleSection) {
+          const sectionId = visibleSection.target.getAttribute("id");
+          onSectionChange(sectionId); // Call the prop to update Navbar state
+        }
+      },
+      { threshold: 0.5 } // Adjust to trigger when half of the section is in view
+    );
+
+    sections.forEach((section) => {
+      if (section.ref) {
+        observer.observe(section.ref);
+      }
+    });
+
+    return () => {
+      sections.forEach((section) => {
+        if (section.ref) {
+          observer.unobserve(section.ref);
+        }
+      });
+    };
+  }, [onSectionChange]);
   return (
     <>
-      <HeroSection />
-      <FeaturesSection />
-      <AboutUsSection />
-      <ContactUsSection />
+      <section ref={(el) => (sectionRefs.current.home = el)} id="home-section">
+        <HeroSection />
+      </section>
+      <section
+        ref={(el) => (sectionRefs.current.features = el)}
+        id="features-section"
+      >
+        <FeaturesSection />
+      </section>
+      <section
+        ref={(el) => (sectionRefs.current.about = el)}
+        id="about-us-section"
+      >
+        <AboutUsSection />
+      </section>
+      <section
+        ref={(el) => (sectionRefs.current.contact = el)}
+        id="contact-us-section"
+      >
+        <ContactUsSection />
+      </section>
       <div
         style={{
           position: "fixed",
