@@ -24,7 +24,7 @@ const FeaturesSection = () => {
           >
             <Meta
               className="home-feature-section-card-meta"
-              title="Real-Time Bookin"
+              title="Real-Time Booking"
               description="Book and manage spaces easily with real-time updates."
             />
           </Card>

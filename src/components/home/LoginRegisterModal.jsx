@@ -8,21 +8,18 @@ const LoginRegisterModal = ({ open = false, handleCancel }) => {
     {
       key: "1",
       label: "Login",
-      children: <UserLoginForm />,
+      children: <UserLoginForm handleCancel={handleCancel} />,
     },
     {
       key: "2",
       label: "Register",
-      children: <UserRegisterForm />,
+      children: <UserRegisterForm handleCancel={handleCancel} />,
     },
   ];
 
-  const onChange = (key) => {
-    console.log(key);
-  };
   return (
     <Modal open={open} onCancel={handleCancel} footer={null}>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Tabs defaultActiveKey="1" items={items} />
     </Modal>
   );
 };

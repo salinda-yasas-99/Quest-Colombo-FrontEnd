@@ -6,7 +6,7 @@ import { userLogin } from "../../services/authService";
 import { useDispatch } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
 
-const UserLoginForm = () => {
+const UserLoginForm = ({ handleCancel }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
@@ -28,7 +28,13 @@ const UserLoginForm = () => {
 
       if (response.user) {
         dispatch(loginSuccess(response.user));
-        navigate("/user-dashboard");
+        openNotificationWithIcon(
+          "success",
+          "Success",
+          "Successfully Logged in"
+        );
+        handleCancel();
+        // navigate("/user-dashboard");
       }
     } catch (error) {
       openNotificationWithIcon(
