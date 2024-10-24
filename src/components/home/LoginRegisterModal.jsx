@@ -8,12 +8,12 @@ const LoginRegisterModal = ({ open = false, handleCancel }) => {
     {
       key: "1",
       label: "Login",
-      children: <UserLoginForm />,
+      children: <UserLoginForm handleCancel={handleCancel} />,
     },
     {
       key: "2",
       label: "Register",
-      children: <UserRegisterForm />,
+      children: <UserRegisterForm handleCancel={handleCancel} />,
     },
   ];
 

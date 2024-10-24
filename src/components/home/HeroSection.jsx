@@ -17,13 +17,17 @@ const HeroSection = () => {
     api[type]({
       message: message,
       description: description,
-      placement: "topRight",
+      placement: "bottomRight",
     });
   };
 
   const handleBookNow = () => {
     if (!user || user?.role !== "user" || (!token && !localUser)) {
-      openNotificationWithIcon("info", "Info", "Please login to the System");
+      openNotificationWithIcon(
+        "info",
+        "Info",
+        "Please log in to the system to book your workspace"
+      );
     } else {
       navigate("/user-dashboard");
     }

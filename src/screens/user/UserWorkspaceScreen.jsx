@@ -391,7 +391,7 @@ const UserWorkspaceScreen = () => {
               </Form.Item>
               <Form.Item>
                 <StripeCheckout
-                  name="Shoe Heaven"
+                  name="Quest Colombo"
                   shippingAddress
                   description={`Your total is Rs.${getTotalAmount()}`}
                   amount={getTotalAmount() * 100} // Amount in cents

@@ -6,7 +6,7 @@ import { userRegister } from "../../services/authService";
 import { useDispatch } from "react-redux";
 import { loginFailure, loginSuccess } from "../../redux/userSlice";
 
-const UserRegisterForm = () => {
+const UserRegisterForm = ({ handleCancel }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
@@ -27,7 +27,13 @@ const UserRegisterForm = () => {
 
       if (response.user) {
         dispatch(loginSuccess(response.user));
-        navigate("/user-dashboard");
+        openNotificationWithIcon(
+          "success",
+          "Success",
+          "Registration Successful"
+        );
+        handleCancel();
+        // navigate("/user-dashboard");
       }
     } catch (error) {
       openNotificationWithIcon(
